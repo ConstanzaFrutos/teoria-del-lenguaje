@@ -42,5 +42,15 @@ Acepta tipos complejos definidos por les usuarios.
 
 Es posible crear contratos para votar, para el crowdfunding, para subastas a ciegas, para monederos muti firmas, y mucho más.
 
-Los contratos generados son de acceso público. 
 
+### Contratos
+
+Para crear un contrato se usa la palabra reservada `contract` de la siguiente manera:
+
+```
+contract MiContrato {
+    // Datos del contrato
+}
+```
+
+Los contratos generados son de acceso público para les usuarios del blockchain.

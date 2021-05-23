@@ -13,3 +13,34 @@ Remix: https://remix.ethereum.org/#optimize=false&runs=200&evmVersion=null&versi
 
 # Características de Solidity
 
+## General
+
+Solidity es un lenguaje de alto nivel orientado a contratos. Está enfocado específicamente a la Máquina Virtual de Etehreum (EVM).
+
+## Sintaxis
+
+* Las líneas se finalizan con ';'. 
+* Se usan llaves para indicar bloques de código.
+
+## Tipado
+
+Es de tpado estático. Es decir que hay que especificar el tipo de dato de las variables que se declaren de forma estática, estos luego serán compilados, y en caso de que en tiempo de ejecución se le pase un tipo de dato distinto, la ejecución fallará.
+
+## Herencia
+
+Acepta Herencia.
+
+## Bibliotecas
+
+Acepta bibliotecas
+
+## Tipos complejos
+
+Acepta tipos complejos definidos por les usuarios.
+
+## Usos
+
+Es posible crear contratos para votar, para el crowdfunding, para subastas a ciegas, para monederos muti firmas, y mucho más.
+
+Los contratos generados son de acceso público. 
+

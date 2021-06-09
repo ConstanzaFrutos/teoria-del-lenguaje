@@ -5,6 +5,10 @@ pragma solidity >=0.7.0 <0.9.0;
  * @dev Generacion aleatoria de cartas
  */
 contract CartaFactory {
+    uint256 semilla = 0;
+    uint8 cantidadDigitos = 16;
+    uint256 modulo = 10 ** cantidadDigitos;
+
     struct Carta {
         uint256 descripcion;
     }
@@ -23,15 +27,17 @@ contract CartaFactory {
      * @dev Crea un valor aleatorio de descripcion 
      * @return valor aleatorio de descripcion
      */
-    function _crearDescripcionAleatoria(string memory _semilla) private pure returns (uint256){
-        return uint256(keccak256(abi.encodePacked(_semilla)));
+    function _crearDescripcionAleatoria() private returns (uint256){
+        semilla ++;
+        uint256 descripcionAleatoria = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, semilla)));
+        return descripcionAleatoria % modulo;
     }
     
     /**
      * @dev Crea una carta aleatoria
      */
-    function crearCartaAleatoria(string memory _semilla) public {
-        uint256 descripcionAleatoria = _crearDescripcionAleatoria(_semilla);
+    function crearCartaAleatoria() public {
+        uint256 descripcionAleatoria = _crearDescripcionAleatoria();
         _crearCarta(descripcionAleatoria);
     }
 }

@@ -71,6 +71,61 @@ contract MyContract {
 
 Cada vez que el contrato se deploye, o sea creado, se va a tener value con el valor default "my value".
 
+### Variables de estado
+
+Las `Variables de estado` se guardan permanentemente en el almacenamiento del contrato. Esto significa que se escriben en la cadena de bloques de Ethereum.
+
+Estas variables pueden declararse con visibilidad publica. Solidity crea automáticamente un `getter`para obtener su valor. Este puede ser usado por cualquier persona que tenga acceso al contrato en la Blockchain.
+
+tambein pueden ser creadas inicializadas.
+
+### Tipos de dato nativos
+
+* `uint`: entero sin signo. Se indica la cantidad de bits del uint usando un número múltiplo de 8 hasta 256. Por ejemplo, uint8 es un entero sin signo de 8 bits. uint es por default uint256.
+
+* `int`: entero con signo
+
+* `string`: cadena de texto UTF-8 de longitud variable
+
+### Operaciones matematicas
+
+* `Suma`: x + y
+* `Resta`: x - y,
+* `Multiplicación`: x * y
+* `División`: x / y
+* `Módulo`: x % y 
+* `Operador exponencial`: x ** y;
+
+### Tipos de datos mas complejos
+
+Para definir un tipo de dato mas complejo se usan los `Structs`. Para esto se usa la palabra reservada `struct`, se indica el nombre del tipo de dato, y los parametros que tendra.
+
+```
+struct Carta {
+  uint numero;
+  string descripción;
+}
+```
+
+En este ejemplo se define un tipo de dato llamado `Carta` que tiene como parámetros un entero sin signo llamado número y un string que contiene la descripción.
+
+### Arreglos
+
+Cuando se quiere una colección de algun tipo de dato usamos se usan `arreglos`, estos pueden ser de longitud fija o dinámica.
+
+```
+// Un Array con una longitud fija de 2 elementos de tipo uint:
+uint[2] arregloFijoDeUints;
+// otro Array fijo, con longitud fija de 5 elementos de tipo string:
+string[5] arregloFijoDeStrings;
+// un Array dinámico, sin longitud fija que puede seguir creciendo:
+uint[] arregloDinamico;
+// un arreglo dinamico de una estructura compleja:
+Carta[] aregloDeCartas;
+```
+
+Si se declara al arreglo como público, Solidity crea un `getter` para acceder al mismo.
+
 ### Funciones
 
 Para escribir una función, se usa la palabra reservada `function`. Se puede especificar una visibilidad (publica o privada) y el tipo de dato que devuelve.

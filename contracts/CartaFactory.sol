@@ -5,6 +5,9 @@ pragma solidity >=0.7.0 <0.9.0;
  * @dev Generacion aleatoria de cartas
  */
 contract CartaFactory {
+
+    event NuevaCarta(uint cartaId, string descripcion);
+
     uint256 semilla = 0;
     uint8 cantidadDigitos = 16;
     uint256 modulo = 10 ** cantidadDigitos;
@@ -14,13 +17,19 @@ contract CartaFactory {
     }
     
     Carta[] public cartas;
+
+    mapping (uint => address) public cartaAPersona;
+    mapping (address => uint) personaCantidadCartas;
     
     /**
      * @dev Crea una instancia de carta
      * @param _descripcion descripcion para crear la carta
      */
     function _crearCarta(uint256 _descripcion) private {
-        cartas.push(Carta(_descripcion));
+        uint id = cartas.push(Carta(_descripcion)) - 1;
+        cartaAPersona[id] = msg.sender;
+        personaCantidadCartas[msg.sender] ++;
+        NuevaCarta(id, _descripcion);
     }
 
     /**

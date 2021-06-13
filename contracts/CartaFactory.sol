@@ -8,12 +8,15 @@ contract CartaFactory {
 
     event NuevaCarta(uint cartaId, string descripcion);
 
-    uint256 semilla = 0;
     uint8 cantidadDigitos = 16;
     uint256 modulo = 10 ** cantidadDigitos;
+    uint256 semillaDescripcion = 0;
+    uint256 semillaTipo = 0;
+    uint8 cantidadTipos = 3;
 
     struct Carta {
         uint256 descripcion;
+        string tipo;
     }
     
     Carta[] public cartas;
@@ -37,9 +40,26 @@ contract CartaFactory {
      * @return valor aleatorio de descripcion
      */
     function _crearDescripcionAleatoria() private returns (uint256){
-        semilla ++;
+        semillaDescripcion ++;
         uint256 descripcionAleatoria = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, semilla)));
         return descripcionAleatoria % modulo;
+    }
+
+    /**
+     * @dev Crea un tipo de carta aleatorio
+     * @return valor aleatorio de tipo de carta
+     */
+    function _crearTipoAleatorio() private returns (string){
+        semillaTipo ++;
+        uint8 tipoAleatorio = uint8(keccak8(abi.encodePacked(block.timestamp, msg.sender, semilla)));
+        tipoAleatorio = tipoAleatorio % cantidadTipos;
+        if (tipoAleatorio == 1) {
+            return "normal";
+        } else if (tipoAleatorio == 2) {
+            return "rara";
+        } else {
+            return "epica";
+        }
     }
     
     /**
@@ -47,6 +67,7 @@ contract CartaFactory {
      */
     function crearCartaAleatoria() public {
         uint256 descripcionAleatoria = _crearDescripcionAleatoria();
-        _crearCarta(descripcionAleatoria);
+        string tipoAleatorio = _crearTipoAleatorio();
+        _crearCarta(descripcionAleatoria, tipoAleatorio);
     }
 }

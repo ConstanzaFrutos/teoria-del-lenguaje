@@ -26,6 +26,28 @@
           <br/>
         </div>
       </div>
+    </div>
+
+    <div>
+      <button class="btn btn-default btn-ver-cartas" type="button">Ver Cartas</button>
+    </div>
+
+    <div id="cartaTemplate">
+      <div class="col-sm-6 col-md-4 col-lg-3">
+        <div class="panel panel-default panel-carta">
+          <div class="panel-heading">
+            <h3 class="panel-title">Carta {}</h3>
+          </div>
+          <div class="panel-body">
+            <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://http2.mlstatic.com/D_NQ_NP_719937-MLA28791890860_112018-O.webp" data-holder-rendered="true">
+            <br/><br/>
+            <strong>Tipo</strong>: <span class="tipo-carta" type="tipo-carta"></span><br/>
+            <strong>Descripcion</strong>: <span class="descripcion-carta" type="descripcion-carta"></span><br/>
+            <button class="btn btn-default btn-crear" type="button" data-id="0">Crear</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

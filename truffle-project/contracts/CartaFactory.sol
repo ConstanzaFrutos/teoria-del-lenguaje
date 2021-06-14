@@ -1,4 +1,5 @@
 pragma solidity 0.5.16;
+pragma experimental ABIEncoderV2;
 
 /**
  * @title CartaFactory
@@ -69,4 +70,12 @@ contract CartaFactory {
         uint8 tipoAleatorio = _crearTipoAleatorio();
         _crearCarta(descripcionAleatoria, tipoAleatorio);
     }
+
+    /**
+     * Para obtener todas las cartas
+     */
+    function getCartas() public view returns (Carta[] memory) {
+        return cartas;
+    }
+    
 }

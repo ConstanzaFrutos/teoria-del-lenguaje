@@ -1,6 +1,6 @@
 Para el domingo 13/06:
 
-- [ ] Terminar el contrato que genere Cartas (Constanza)
+- [X] Terminar el contrato que genere Cartas (Constanza)
 - [ ] Crear un token personalizado (Lautaro)
 - [ ] Investigar la creación de la billetera (Filyan y Sofia)
 

@@ -1,6 +1,9 @@
 App = {
   web3Provider: null,
   contracts: {},
+  listaCartas: null,
+  template: null,
+
 
   init: async function() {
     return await App.initWeb3();
@@ -31,6 +34,9 @@ App = {
     var version = web3.version.api;
     console.log(version);
 
+    listaCartas = document.querySelector(".cartas-list");
+    template = document.getElementById("carta-template");
+
     return App.initContract();
   },
 
@@ -60,43 +66,49 @@ App = {
 
   handleGetCartas() {
     var cartaInstance;
-    alert("Handle get cartas");
+    //alert("Handle get cartas");
 
     App.contracts.CartaFactory.deployed().then(function(instance) {
       cartaInstance = instance;
-      alert("Obteniendo cartas...");
+      //alert("Obteniendo cartas...");
 
-      return cartaInstance.getCartas();
+      return cartaInstance.getCartas.call();
     }).then(function(cartas) {
-      console.table(cartas);
-      for (i = 0; i < cartas.length; i++) {
-        console.log(cartas[i]);
-        $('.panel-carta').eq(i).find('tipo-carta').text(cartas[i].tipo);
-        $('.panel-carta').eq(i).find('descripcion-carta').text(cartas[i].descripcion);
+      const [descripciones, tipos] = cartas;
+      console.log("CARTAS")
+      console.log(cartas);
+      //console.log(descripciones);
+      //console.log(tipos);
+      tipoCarta = 'Epica';
+      for (i = 0; i < descripciones.length; i++) {
+        if (tipos[i] == 1) {
+          tipoCarta == 'Normal';
+        } else if (tipos[i] == 2) {
+          tipoCarta == 'Rara';
+        }
+        const node = App.copyTemplate(tipoCarta, descripciones[i], i);
+        listaCartas.appendChild(node);
       }
     }).catch(function(err) {
       console.log(err.message);
     });
   },
 
-  getCartas: function() {
-    var cartaInstance;
+  copyTemplate(tipo, descripcion, id) {
+    const element = template.cloneNode(true);
+    element.id = "carta" + id;
+    element.removeAttribute("hidden");
+  
+    const idElement = element.querySelector(".id-carta span");
+    idElement.innerText = id;
 
-    App.contracts.CartaFactory.deployed().then(function(instance) {
-      cartaInstance = instance;
-      console.log("Obteniendo cartas...");
-      //return cartaInstance.cartas.call();
-      return cartaInstance.cartas();
-    }).then(function(cartas) {
-      for (i = 0; i < cartas.length; i++) {
-        console.log(cartas[i]);
-        //$('.panel-carta').eq(i).find('button').text('Success').attr('disabled', true);
-        $('.panel-carta').eq(i).find('tipo-carta').text(cartas[i].tipo);
-        $('.panel-carta').eq(i).find('descripcion-carta').text(cartas[i].descripcion);
-      }
-    }).catch(function(err) {
-      console.log(err.message);
-    });
+    const nameElement = element.querySelector(".tipo-carta b");
+    nameElement.innerText = tipo;
+  
+    const addressElement = element.querySelector(".descripcion-carta b");
+    addressElement.innerText = descripcion;
+  
+    return element;
   },
 
   handleCrearCarta: function(event) {
@@ -118,7 +130,7 @@ App = {
         return CartaInstance.crearCartaAleatoria({from: account});
       }).then(function(result) {
         alert("Carta creada...");
-        return App.getCartas();
+        return App.handleGetCartas();
       }).catch(function(err) {
         console.log(err.message);
       });

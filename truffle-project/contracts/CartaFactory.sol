@@ -15,6 +15,8 @@ contract CartaFactory {
     uint256 semillaTipo = 0;
     uint8 cantidadTipos = 3;
 
+    uint256 cantidadCartas = 0;
+
     /**
     * Tipos:
     * 1: normal
@@ -39,6 +41,7 @@ contract CartaFactory {
         uint id = cartas.push(Carta(_descripcion, _tipo)) - 1;
         cartaAPersona[id] = msg.sender;
         personaCantidadCartas[msg.sender] ++;
+        cantidadCartas ++;
         emit NuevaCarta(id, _descripcion, _tipo);
     }
 
@@ -74,8 +77,14 @@ contract CartaFactory {
     /**
      * Para obtener todas las cartas
      */
-    function getCartas() public view returns (Carta[] memory) {
-        return cartas;
+    function getCartas() external view returns (uint256[] memory, uint8[] memory) {
+        uint256[] memory descripciones = new uint256[](cantidadCartas);
+        uint8[] memory tipos = new uint8[](cantidadCartas);
+        for (uint i = 0; i < cantidadCartas; i++) {
+            descripciones[i] = (cartas[i].descripcion);
+            tipos[i] = (cartas[i].tipo);
+        }
+        return (descripciones, tipos);
     }
-    
+
 }

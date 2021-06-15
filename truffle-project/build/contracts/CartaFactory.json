@@ -6439,12 +6439,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x91905c6c4B183BcB2C37f6633657a0d28b897793",
-      "transactionHash": "0xf52f9fb73ef87dbb7aec3486efc5892538dbc7770a6ee94f459107781b4ec490"
+      "address": "0xF58f200dD53819595C8f7Af3d61BC6770CF60d54",
+      "transactionHash": "0x91b35bd8188f17039e48522104af6d5a00827a8d49ffc19eec1e40aa8fdc932c"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-14T23:10:26.998Z",
+  "updatedAt": "2021-06-15T00:49:22.756Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Generacion aleatoria de cartas",

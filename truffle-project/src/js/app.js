@@ -57,14 +57,19 @@ App = {
   },
 
   bindEvents: function() {
-    $(document).on('click', '.btn-crear', App.handleCrearCarta);
-  },
-
-  bindEvents: function() {
+    $(document).on('click', '.btn-crear-carta', App.handleCrearCarta);
     $(document).on('click', '.btn-ver-cartas', App.handleGetCartas);
   },
 
   handleGetCartas() {
+    /*const cartas = document.querySelectorAll(".cartas-list");
+
+    for (let i = 0; i < cartas.length; i++) {
+        cartas[i].remove();
+    }
+    Ver como hacer funcionar esto
+    */
+
     var cartaInstance;
     //alert("Handle get cartas");
 
@@ -112,6 +117,7 @@ App = {
   },
 
   handleCrearCarta: function(event) {
+    alert("Por crear carta...");
     event.preventDefault();
 
     var CartaInstance;
@@ -130,7 +136,7 @@ App = {
         return CartaInstance.crearCartaAleatoria({from: account});
       }).then(function(result) {
         alert("Carta creada...");
-        return App.handleGetCartas();
+        return;
       }).catch(function(err) {
         console.log(err.message);
       });

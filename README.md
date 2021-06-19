@@ -155,3 +155,22 @@ contract MyContract {
 ```
 
 En este caso, el valor que recibe la función comienza con `_` para indicar que no es la variable `value` del contrato. 
+
+#### Modificadores de funciones
+
+Un modificador de función es igual que una función, pero usa la palabra clave `modifier` en vez de `function`. Los modificadores no pueden llamarse directamente como una función, sino que se usan dentro de una función como si fueran un "decorador". De esta manera, se ejecuta la acción del modificador, y si el resultado es el esperado, se ejecuta la función en cuestion, sino se detiene la ejecución. Un ejemplo de esto es el modificador `onlyOwner` de `Ownable`. Este se agrega a toda función que solo pueda ser ejecutada por el owner del contrato. Si la ejecuta otra persona, hay una excepción y se finaliza la ejecución. 
+
+Sintaxis:
+
+```
+modifier onlyOwner() {
+  require(msg.sender == owner);
+  _;
+}
+
+function comprar() external onlyOwner {
+    // lo que haga la funcion
+}
+```
+
+Los modificadores tambien pueden aceptar parámetros.

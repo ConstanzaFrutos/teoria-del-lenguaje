@@ -1,11 +1,13 @@
 pragma solidity 0.5.16;
 pragma experimental ABIEncoderV2;
 
+import "./Ownable.sol";
+
 /**
  * @title CartaFactory
  * @dev Generacion aleatoria de cartas
  */
-contract CartaFactory {
+contract CartaFactory is Ownable {
 
     event NuevaCarta(uint cartaId, uint256 descripcion, uint8 tipo);
 

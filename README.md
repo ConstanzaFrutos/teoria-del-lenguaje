@@ -174,3 +174,29 @@ function comprar() external onlyOwner {
 ```
 
 Los modificadores tambien pueden aceptar parámetros.
+
+## Gas
+
+El `Gas` es el combustible que mueven las DApps de Ethereum. En Solidity, tus usuarios tienen que pagar cada vez que ejecuten una función de tu DApp con gas. La divisa de Ethereum es el `Ether`, que se obtiene con plata real. Los usuarios obtienen gas mediante el ether, entonces, al usar nuestros contratos, estan consumiendo ETH.
+
+La cantidad de gas necesaria para ejecutar una función depende de la complejidad de esta. Cada operación individual tiene un coste de gas basado aproximadamente en cuantos recursos computacionales se necesitarán para llevarla a cabo (escribir en memoria es más caro que añadir dos integers). El total coste de gas de tu función es la suma del coste de cada una de sus operaciones.
+
+Dado que los usuarios estan consumiendo dinero al usar nuestros contratos, es importante optimizar el código. Mucho mas importante que en otros lenguajes. 
+
+El gas es necesario, por como esta construída Ethereum. Se lo describe como un ordenador grande, lento, pero extremandamente seguro. Cuando se ejecuta una función, cada uno de los nodos de la red necesita ejecutar esa misma función para comprobar su respuesta - miles de nodos verificando cada ejecución de funciones es lo que hace a Ethereum descentralizado, y que sus datos sean inmutables y resistentes a la censura.
+
+Los creadores de Ethereum querian estar seguros de que nadie pudiese obstruir la red con un loop infinito, o acaparar todos los recursos de la red con cálculos intensos. Por eso no hicieron las transacciones gratuitas, y los usuarios tienen que pagar por su poder de computo así como por su espacio en memoria.
+
+Es importante notar, que tambien hay `sidechains` en las cuales se opera de otra manera, y por eso sistemas que requieran de mucho gas se ejecutaría en una de estas, no en la mainnet de Ethereum. 
+
+Antes se habló de los diferentes tamaños de los `uint` (uint8, uint16, ..., uint256). Usar un uint con menor cantidad de bits a 256 no ahorra gas por si solo. Dado que de todas maneras solidity reserva 256 bits de almacenamiento independientemente del tamaño del uint. Pero hay una excepción, si los uint estan dentro de un struct, solidity los empaqueta de manera de usar menos almacenamiento. Para esto deben agruparse los tipos de dato que sean iguales, así se minimiza el espacio requerido.
+
+```
+struct Empaquetado {
+  uint32 a;
+  uint32 b;
+  uint c;
+}
+```
+
+Los uint32 estan uno al lado del otro en el ejemplo, permitiendo a Solidity optimizar el espacio.

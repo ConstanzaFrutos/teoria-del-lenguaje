@@ -206,6 +206,11 @@ Los creadores de Ethereum querian estar seguros de que nadie pudiese obstruir la
 
 Es importante notar, que tambien hay `sidechains` en las cuales se opera de otra manera, y por eso sistemas que requieran de mucho gas se ejecutaría en una de estas, no en la mainnet de Ethereum. 
 
+
+### Ahorro de gas
+
+#### Empaquetado de structs
+
 Antes se habló de los diferentes tamaños de los `uint` (uint8, uint16, ..., uint256). Usar un uint con menor cantidad de bits a 256 no ahorra gas por si solo. Dado que de todas maneras solidity reserva 256 bits de almacenamiento independientemente del tamaño del uint. Pero hay una excepción, si los uint estan dentro de un struct, solidity los empaqueta de manera de usar menos almacenamiento. Para esto deben agruparse los tipos de dato que sean iguales, así se minimiza el espacio requerido.
 
 ```
@@ -217,3 +222,7 @@ struct Empaquetado {
 ```
 
 Los uint32 estan uno al lado del otro en el ejemplo, permitiendo a Solidity optimizar el espacio.
+
+#### View
+
+Cuando una función solo necesita leer datos de la blockchain se la puede marcar como `view`. Las funciones `view` no cuestan gas (a menos que sean llamadas por una función que si gasta gas). Esto se debe a que no cambian nada en la blockchain, solo leen datos. Al indicar que es de tipo view, se le indica a web3.js que solo necesita consultar el nodo local de Ethereum para ejecutar la función, y que no necesita crear ninguna transacción en la blockchain. 

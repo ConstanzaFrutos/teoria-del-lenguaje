@@ -226,3 +226,10 @@ Los uint32 estan uno al lado del otro en el ejemplo, permitiendo a Solidity opti
 #### View
 
 Cuando una función solo necesita leer datos de la blockchain se la puede marcar como `view`. Las funciones `view` no cuestan gas (a menos que sean llamadas por una función que si gasta gas). Esto se debe a que no cambian nada en la blockchain, solo leen datos. Al indicar que es de tipo view, se le indica a web3.js que solo necesita consultar el nodo local de Ethereum para ejecutar la función, y que no necesita crear ninguna transacción en la blockchain. 
+
+
+## Auxiliares
+
+### Compra con un token diferente a Ethereum
+
+https://ethereum.stackexchange.com/questions/57286/make-function-payable-for-a-specific-erc20-token

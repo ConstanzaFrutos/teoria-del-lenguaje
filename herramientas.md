@@ -28,6 +28,10 @@ Se debe crear un archivo en la carpeta `/migrations` con la migracion del contra
 
 `truffle migrate`
 
+Si se modifica el contrato se debe volver a correr la migracion:
+
+`truffle migrate --reset`
+
 ## Prueba manual con truffle
 
 Primero se debe iniciar la consola:

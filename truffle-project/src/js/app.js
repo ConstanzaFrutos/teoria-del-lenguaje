@@ -69,7 +69,7 @@ App = {
     $(document).on('click', '.btn-crear-carta', App.handleCrearCarta);
     $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
-    //$(document).on('click', '.btn-transferir', App.handleTransferir);
+    $(document).on('click', '.btn-transferir', App.handleTransferirCarta);
   },
 
   handleGetCartas() {
@@ -171,10 +171,10 @@ App = {
       }
 
       var account = accounts[0];
-      console.log(account);
 
       App.contracts.CartaItem.deployed().then(function(instance) {
         CartaInstance = instance;
+        console.log(`Account ${account}`);
 
         return CartaInstance.awardItem(account);
       }).then(function(result) {
@@ -200,6 +200,7 @@ App = {
 
       App.contracts.CartaItem.deployed().then(function(instance) {
         CartaInstance = instance;
+        console.log(event);
 
         return CartaInstance.transferItem(event.to, event.cartaId, {from: account});
       }).then(function(result) {

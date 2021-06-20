@@ -2,6 +2,8 @@ pragma solidity ^0.8.0;
 
 import "./CartaHelper.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+
 
 /**
  * @title CartaItem
@@ -15,6 +17,7 @@ contract CartaItem is CartaHelper, ERC721 {
     function awardItem(address _owner) public returns (uint256) {
         personaCantidadCartas[_owner] ++;
         uint _tokenId = crearCartaAleatoria();
+        cartaAPersona[_tokenId] = _owner;
 
         _safeMint(_owner, _tokenId);
         return _tokenId;

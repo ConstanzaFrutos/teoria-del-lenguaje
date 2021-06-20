@@ -48,7 +48,25 @@ App = {
     
       // Set the provider for our contract
       App.contracts.CartaFactory.setProvider(App.web3Provider);
+    });
+
+    $.getJSON('CartaAdmin.json', function(data) {
+      // Get the necessary contract artifact file and instantiate it with @truffle/contract
+      var CartaAdminArtifact = data;
+      App.contracts.CartaAdmin = TruffleContract(CartaAdminArtifact);
     
+      // Set the provider for our contract
+      App.contracts.CartaAdmin.setProvider(App.web3Provider);
+    });
+
+    $.getJSON('CartaHelper.json', function(data) {
+      // Get the necessary contract artifact file and instantiate it with @truffle/contract
+      var CartaHelperArtifact = data;
+      App.contracts.CartaHelper = TruffleContract(CartaHelperArtifact);
+    
+      // Set the provider for our contract
+      App.contracts.CartaHelper.setProvider(App.web3Provider);
+
       // Use our contract to retrieve cartas
       return App.handleGetCartas();
     });
@@ -73,7 +91,7 @@ App = {
     var cartaInstance;
     //alert("Handle get cartas");
 
-    App.contracts.CartaFactory.deployed().then(function(instance) {
+    App.contracts.CartaHelper.deployed().then(function(instance) {
       cartaInstance = instance;
       //alert("Obteniendo cartas...");
 

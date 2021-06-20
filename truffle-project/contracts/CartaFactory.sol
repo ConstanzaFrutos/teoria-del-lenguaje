@@ -76,17 +76,4 @@ contract CartaFactory is Ownable {
         _crearCarta(descripcionAleatoria, tipoAleatorio);
     }
 
-    /**
-     * Para obtener todas las cartas
-     */
-    function getCartas() external view returns (uint256[] memory, uint8[] memory) {
-        uint256[] memory descripciones = new uint256[](cantidadCartas);
-        uint8[] memory tipos = new uint8[](cantidadCartas);
-        for (uint i = 0; i < cantidadCartas; i++) {
-            descripciones[i] = (cartas[i].descripcion);
-            tipos[i] = (cartas[i].tipo);
-        }
-        return (descripciones, tipos);
-    }
-
 }

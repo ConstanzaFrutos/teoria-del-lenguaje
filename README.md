@@ -227,6 +227,19 @@ Los uint32 estan uno al lado del otro en el ejemplo, permitiendo a Solidity opti
 
 Cuando una función solo necesita leer datos de la blockchain se la puede marcar como `view`. Las funciones `view` no cuestan gas (a menos que sean llamadas por una función que si gasta gas). Esto se debe a que no cambian nada en la blockchain, solo leen datos. Al indicar que es de tipo view, se le indica a web3.js que solo necesita consultar el nodo local de Ethereum para ejecutar la función, y que no necesita crear ninguna transacción en la blockchain. 
 
+## Tokens
+
+Un token es un contrato inteligente que sigue una serie de reglas comunes. Implementa un conjunto estándar de funciones que comparten el resto de los tokens. Es importante que sigan estándares para que cualquier persona sepa como comunicarse con estos. 
+
+Dado que se usan para cuestiones financieras, por lo general implementan funciones de transferencia o de obtencion de balance de cuenta. Contienen un mapeo de direcciones a uint para poder realizar el seguimiento de cuanto saldo tiene cada dirección. Siendo el token un contrato que realiza un seguimiento de quien posee la cantidad de ese token y algunas funciones para que los usuarios puedan transferir sus tokens a otras direcciones.
+
+Hay distintos estándares de tokens. En nuestro caso vamos a usar ERC20 para la moneda del sistema y ERC721 para los NFTs (Cartas).
+
+### ERC721
+
+Se decide usar ERC721 para las cartas, porque estas no son divisibles (no se pueden transferir 0,3 cartas). A su vez, no todas las cartas son creadas iguales. Los tokens ERC721 no son intercambiables entre sí, ya que se supone que cada uno de ellos es totalmente único e indivisible. Solo se pueden intercambiar en unidades completas, y cada uno tiene una ID única. Por esto es que se usa este estándas para los cripto-coleccionables.
+
+El beneficio de usar el estándar es que no tenemos que implementar la lógica de compra/venta, sino que usamos la del estándar. De esta manera tambien otro sistema que quiera usar nuestras Cartas, puede hacerlo siguiendo la misma especificación.
 
 ## Auxiliares
 

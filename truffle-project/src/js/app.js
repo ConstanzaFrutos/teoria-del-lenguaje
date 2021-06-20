@@ -76,7 +76,8 @@ App = {
 
   bindEvents: function() {
     $(document).on('click', '.btn-crear-carta', App.handleCrearCarta);
-    $(document).on('click', '.btn-ver-cartas', App.handleGetCartas);
+    $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
+    $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
   },
 
   handleGetCartas() {
@@ -91,7 +92,7 @@ App = {
     var cartaInstance;
     //alert("Handle get cartas");
 
-    App.contracts.CartaHelper.deployed().then(function(instance) {
+    App.contracts.CartaFactory.deployed().then(function(instance) {
       cartaInstance = instance;
       //alert("Obteniendo cartas...");
 
@@ -117,6 +118,39 @@ App = {
     });
   },
 
+  handleGetMisCartas() {
+    var cartaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      alert(`Obteniendo cartas de ${account}`);
+
+      App.contracts.CartaFactory.deployed().then(function(instance) {
+        cartaInstance = instance;
+  
+        return cartaInstance.getCartasDe(account);
+      }).then(function(cartas) {
+        const [descripciones, tipos] = cartas;
+        tipoCarta = 'Epica';
+        for (i = 0; i < descripciones.length; i++) {
+          if (tipos[i] == 1) {
+            tipoCarta == 'Normal';
+          } else if (tipos[i] == 2) {
+            tipoCarta == 'Rara';
+          }
+          const node = App.copyTemplate(tipoCarta, descripciones[i], i);
+          listaCartas.appendChild(node);
+        }
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
   copyTemplate(tipo, descripcion, id) {
     const element = template.cloneNode(true);
     element.id = "carta" + id;
@@ -135,11 +169,9 @@ App = {
   },
 
   handleCrearCarta: function(event) {
-    alert("Por crear carta...");
     event.preventDefault();
 
     var CartaInstance;
-    alert("Por crear carta...");
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {

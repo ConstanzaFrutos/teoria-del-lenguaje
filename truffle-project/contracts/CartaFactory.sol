@@ -67,11 +67,18 @@ contract CartaFactory is Ownable {
     
     /**
      * @dev Crea una carta aleatoria
+     * @return id de la carta creada
      */
-    function crearCartaAleatoria() public {
+    function crearCartaAleatoria() public returns (uint256) {
         uint256 descripcionAleatoria = _crearDescripcionAleatoria();
         uint8 tipoAleatorio = _crearTipoAleatorio();
         _crearCarta(descripcionAleatoria, tipoAleatorio);
+        return cartas.length - 1;
+    }
+
+    modifier soloDuenioDe(uint _cartaId) {
+        require (msg.sender == cartaAPersona[_cartaId]);
+        _;
     }
 
 }

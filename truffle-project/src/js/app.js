@@ -41,22 +41,16 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON('CartaFactory.json', function(data) {
+    $.getJSON('CartaItem.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with @truffle/contract
-      var CartaFactoryArtifact = data;
-      App.contracts.CartaFactory = TruffleContract(CartaFactoryArtifact);
+      var CartaItemArtifact = data;
+      App.contracts.CartaItem = TruffleContract(CartaItemArtifact);
     
       // Set the provider for our contract
-      App.contracts.CartaFactory.setProvider(App.web3Provider);
-    });
+      App.contracts.CartaItem.setProvider(App.web3Provider);
 
-    $.getJSON('CartaAdmin.json', function(data) {
-      // Get the necessary contract artifact file and instantiate it with @truffle/contract
-      var CartaAdminArtifact = data;
-      App.contracts.CartaAdmin = TruffleContract(CartaAdminArtifact);
-    
-      // Set the provider for our contract
-      App.contracts.CartaAdmin.setProvider(App.web3Provider);
+      // Use our contract to retrieve cartas
+      return App.handleGetCartas();
     });
 
     $.getJSON('CartaHelper.json', function(data) {
@@ -66,9 +60,6 @@ App = {
     
       // Set the provider for our contract
       App.contracts.CartaHelper.setProvider(App.web3Provider);
-
-      // Use our contract to retrieve cartas
-      return App.handleGetCartas();
     });
 
     return App.bindEvents();
@@ -78,6 +69,7 @@ App = {
     $(document).on('click', '.btn-crear-carta', App.handleCrearCarta);
     $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
+    //$(document).on('click', '.btn-transferir', App.handleTransferir);
   },
 
   handleGetCartas() {
@@ -92,7 +84,7 @@ App = {
     var cartaInstance;
     //alert("Handle get cartas");
 
-    App.contracts.CartaFactory.deployed().then(function(instance) {
+    App.contracts.CartaItem.deployed().then(function(instance) {
       cartaInstance = instance;
       //alert("Obteniendo cartas...");
 
@@ -129,7 +121,7 @@ App = {
       var account = accounts[0];
       alert(`Obteniendo cartas de ${account}`);
 
-      App.contracts.CartaFactory.deployed().then(function(instance) {
+      App.contracts.CartaItem.deployed().then(function(instance) {
         cartaInstance = instance;
   
         return cartaInstance.getCartasDe(account);
@@ -179,13 +171,39 @@ App = {
       }
 
       var account = accounts[0];
+      console.log(account);
 
-      App.contracts.CartaFactory.deployed().then(function(instance) {
+      App.contracts.CartaItem.deployed().then(function(instance) {
         CartaInstance = instance;
 
-        return CartaInstance.crearCartaAleatoria({from: account});
+        return CartaInstance.awardItem(account);
       }).then(function(result) {
-        alert("Carta creada...");
+        alert(`Carta ${result} creada`);
+        return;
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  handleTransferirCarta: function(event) {
+    event.preventDefault();
+
+    var CartaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        CartaInstance = instance;
+
+        return CartaInstance.transferItem(event.to, event.cartaId, {from: account});
+      }).then(function(result) {
+        alert(`Carta ${event.cartaId} transferida de ${account} a ${event.to}`);
         return;
       }).catch(function(err) {
         console.log(err.message);

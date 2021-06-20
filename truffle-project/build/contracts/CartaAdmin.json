@@ -371,12 +371,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x9f6FD54F8e76c6B835328FF64ED7222ed2261D6b",
-      "transactionHash": "0x7d7609e5c9cc1b6db9bdb3ff5136617feba7ea115275cc9f1e3ba402a5a60de8"
+      "address": "0x047c47295cA27423e299115eb9507C20661a5Ee3",
+      "transactionHash": "0x52602c8b223503a9ea1a0045a69af39f5182fa69f90ec215718b6094bc626eac"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-20T02:30:39.467Z",
+  "updatedAt": "2021-06-20T20:01:18.211Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Funciones de administracion de cartas como  compra de las mismas o transferencia de ownership",

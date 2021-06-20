@@ -1,5 +1,7 @@
-var CartaFactory = artifacts.require("CartaFactory");
+var CartaAdmin = artifacts.require("CartaAdmin");
+var CartaHelper = artifacts.require("CartaHelper");
 
 module.exports = function(deployer) {
-  deployer.deploy(CartaFactory);
+  deployer.deploy(CartaAdmin);
+  deployer.deploy(CartaHelper);
 };

@@ -50,6 +50,14 @@ Finalmente se puede llamar a sus metodos:
 
 Solidity genera de forma automática los getters de las variables publicas (como el arreglo de cartas).
 
+## Usar OpenZeppelin
+
+Instalacion:
+
+`npm install @openzeppelin/contracts`
+
+https://docs.openzeppelin.com/contracts/3.x/
+
 ## Errores
 
 ### Invalid solidity type tuple

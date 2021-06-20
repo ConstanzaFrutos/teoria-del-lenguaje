@@ -1,7 +1,7 @@
-pragma solidity 0.5.16;
+pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "./Ownable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * @title CartaFactory
@@ -16,8 +16,6 @@ contract CartaFactory is Ownable {
     uint256 semillaDescripcion = 0;
     uint256 semillaTipo = 0;
     uint8 cantidadTipos = 3;
-
-    uint256 public cantidadCartas = 0;
 
     /**
     * Tipos:
@@ -40,10 +38,10 @@ contract CartaFactory is Ownable {
      * @param _descripcion descripcion para crear la carta
      */
     function _crearCarta(uint256 _descripcion, uint8 _tipo) private {
-        uint id = cartas.push(Carta(_descripcion, _tipo)) - 1;
+        cartas.push(Carta(_descripcion, _tipo));
+        uint id = cartas.length - 1;
         cartaAPersona[id] = msg.sender;
         personaCantidadCartas[msg.sender] ++;
-        cantidadCartas ++;
         emit NuevaCarta(id, _descripcion, _tipo);
     }
 
@@ -74,37 +72,6 @@ contract CartaFactory is Ownable {
         uint256 descripcionAleatoria = _crearDescripcionAleatoria();
         uint8 tipoAleatorio = _crearTipoAleatorio();
         _crearCarta(descripcionAleatoria, tipoAleatorio);
-    }
-
-    /**
-     * Para obtener todas las cartas
-     */
-    function getCartas() external view returns (uint256[] memory, uint8[] memory) {
-        uint256[] memory descripciones = new uint256[](cantidadCartas);
-        uint8[] memory tipos = new uint8[](cantidadCartas);
-        for (uint i = 0; i < cantidadCartas; i++) {
-            descripciones[i] = (cartas[i].descripcion);
-            tipos[i] = (cartas[i].tipo);
-        }
-        return (descripciones, tipos);
-    }
-
-    /**
-     * Para obtener todas las cartas correspondientes a un address
-     */
-    function getCartasDe(address _owner) external view returns (uint256[] memory, uint8[] memory) {
-        uint256[] memory descripciones = new uint256[](personaCantidadCartas[_owner]);
-        uint8[] memory tipos = new uint8[](personaCantidadCartas[_owner]);
-
-        uint contador = 0;
-        for (uint i = 0; i < cartas.length; i++) {
-            if (cartaAPersona[i] == _owner) {
-                descripciones[contador] = cartas[i].descripcion;
-                tipos[contador] = cartas[i].tipo;
-                contador ++;
-            }
-        }
-        return (descripciones, tipos);
     }
 
 }

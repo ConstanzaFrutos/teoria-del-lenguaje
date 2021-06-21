@@ -51,7 +51,7 @@ App = {
       App.contracts.CartaItem.setProvider(App.web3Provider);
 
       // Use our contract to retrieve cartas
-      return App.handleGetCartas();
+      //return App.handleGetCartas();
     });
 
     $.getJSON('CartaHelper.json', function(data) {
@@ -67,6 +67,7 @@ App = {
   },
 
   bindEvents: function() {
+    $(document).on('click', '.btn-clean', App.handleClean);
     $(document).on('click', '.btn-crear-carta', App.handleCrearCarta);
     $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
@@ -74,15 +75,11 @@ App = {
     $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
   },
 
+  handleClean() {
+    location.reload();
+  },
+
   handleGetCartas() {
-    /*const cartas = document.querySelectorAll(".cartas-list");
-
-    for (let i = 0; i < cartas.length; i++) {
-        cartas[i].remove();
-    }
-    Ver como hacer funcionar esto
-    */
-
     var cartaInstance;
 
     App.contracts.CartaItem.deployed().then(function(instance) {
@@ -176,13 +173,13 @@ App = {
         cartaInstance = instance;
         console.log(`Account ${account}`);
 
-        return cartaInstance.awardItem(account);
+        return cartaInstance.crearCartaAleatoria({from: account});
       }).then(function(result) {
         alert(`Carta ${result} creada`);
+        location.reload();
         return;
       }).catch(function(err) {
         console.log(err.message);
-        console.log(err);
       });
     });
   },
@@ -206,9 +203,10 @@ App = {
       App.contracts.CartaItem.deployed().then(function(instance) {
         cartaInstance = instance;
         
-        return cartaInstance.transferItem(direccionDestino, cartaId, {from: account});
+        return cartaInstance.transfer(direccionDestino, cartaId, {from: account});
       }).then(function(result) {
         alert(`Carta ${cartaId} transferida de ${account} a ${direccionDestino}`);
+        location.reload();
         return;
       }).catch(function(err) {
         console.log(err.message);

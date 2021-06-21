@@ -2,6 +2,7 @@ App = {
   web3Provider: null,
   contracts: {},
   listaCartas: null,
+  listaCartas: null,
   template: null,
 
 
@@ -35,7 +36,7 @@ App = {
     console.log(version);
 
     listaCartas = document.querySelector(".cartas-list");
-    template = document.getElementById("carta-template");
+    template = document.querySelector("template");
 
     return App.initContract();
   },
@@ -69,7 +70,8 @@ App = {
     $(document).on('click', '.btn-crear-carta', App.handleCrearCarta);
     $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
-    $(document).on('click', '.btn-transferir', App.handleTransferirCarta);
+
+    $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
   },
 
   handleGetCartas() {
@@ -82,20 +84,15 @@ App = {
     */
 
     var cartaInstance;
-    //alert("Handle get cartas");
 
     App.contracts.CartaItem.deployed().then(function(instance) {
       cartaInstance = instance;
-      //alert("Obteniendo cartas...");
 
       return cartaInstance.getCartas.call();
     }).then(function(cartas) {
       const [descripciones, tipos] = cartas;
-      console.log("CARTAS")
-      console.log(cartas);
-      //console.log(descripciones);
-      //console.log(tipos);
       tipoCarta = 'Epica';
+      
       for (i = 0; i < descripciones.length; i++) {
         if (tipos[i] == 1) {
           tipoCarta == 'Normal';
@@ -128,6 +125,8 @@ App = {
       }).then(function(cartas) {
         const [descripciones, tipos] = cartas;
         tipoCarta = 'Epica';
+        console.table(descripciones);
+        
         for (i = 0; i < descripciones.length; i++) {
           if (tipos[i] == 1) {
             tipoCarta == 'Normal';
@@ -144,9 +143,10 @@ App = {
   },
 
   copyTemplate(tipo, descripcion, id) {
-    const element = template.cloneNode(true);
+    const cartaTemplate = document.importNode(template.content, true);
+
+    const element = cartaTemplate.querySelector(".carta");
     element.id = "carta" + id;
-    element.removeAttribute("hidden");
   
     const idElement = element.querySelector(".id-carta span");
     idElement.innerText = id;
@@ -163,7 +163,7 @@ App = {
   handleCrearCarta: function(event) {
     event.preventDefault();
 
-    var CartaInstance;
+    var cartaInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -173,23 +173,25 @@ App = {
       var account = accounts[0];
 
       App.contracts.CartaItem.deployed().then(function(instance) {
-        CartaInstance = instance;
+        cartaInstance = instance;
         console.log(`Account ${account}`);
 
-        return CartaInstance.awardItem(account);
+        return cartaInstance.awardItem(account);
       }).then(function(result) {
         alert(`Carta ${result} creada`);
         return;
       }).catch(function(err) {
         console.log(err.message);
+        console.log(err);
       });
     });
   },
 
   handleTransferirCarta: function(event) {
     event.preventDefault();
+    var data = $("#form-transferencia :input").serializeArray();
 
-    var CartaInstance;
+    var cartaInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -198,13 +200,15 @@ App = {
 
       var account = accounts[0];
 
-      App.contracts.CartaItem.deployed().then(function(instance) {
-        CartaInstance = instance;
-        console.log(event);
+      var direccionDestino = data[0].value;  
+      var cartaId = data[1].value;  
 
-        return CartaInstance.transferItem(event.to, event.cartaId, {from: account});
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaInstance = instance;
+        
+        return cartaInstance.transferItem(direccionDestino, cartaId, {from: account});
       }).then(function(result) {
-        alert(`Carta ${event.cartaId} transferida de ${account} a ${event.to}`);
+        alert(`Carta ${cartaId} transferida de ${account} a ${direccionDestino}`);
         return;
       }).catch(function(err) {
         console.log(err.message);

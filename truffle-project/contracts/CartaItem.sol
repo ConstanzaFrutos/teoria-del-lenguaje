@@ -20,8 +20,9 @@ contract CartaItem is CartaHelper, ERC721 {
     address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
     OzInterface ozContract = OzInterface(ozAddress);
 
-    uint costoCarta = 2;
-    uint costoTransferencia = 1;
+    uint costoCarta = 5;
+    uint costoTransferencia = 3;
+    uint comisionTransferencia = 1;
     address ozAccount = 0x1C53954455A6796723B52021c034964DD9E329dE;
 
     mapping (uint => address) cartaApprovals;
@@ -50,7 +51,7 @@ contract CartaItem is CartaHelper, ERC721 {
     function _transfer(address _from, address _to, uint256 _tokenId) private {
         require(ozContract.balanceOf(_from) >= costoTransferencia, "No tiene saldo suficiente para realizar la transferencia");
         ozContract.transfer(_to, costoTransferencia);
-        ozContract.transfer(ozAccount, costoTransferencia * 0.1); // Comision
+        ozContract.transfer(ozAccount, comisionTransferencia); // Comision
         
         personaCantidadCartas[_to]++;
         personaCantidadCartas[_from]--;
@@ -80,5 +81,12 @@ contract CartaItem is CartaHelper, ERC721 {
     function setOzTokenAddress(address _ozTokenAddress) public onlyOwner {
         ozAddress = _ozTokenAddress;
         ozContract = OzInterface(ozAddress);
+    }
+
+    /**
+     * @dev Se setea la cuenta a la cual se le va a depositar el pago     
+     */
+    function setOzAccountAddress(address _ozAccountAddress) public onlyOwner {
+        ozAccount = _ozAccountAddress;
     }
 }

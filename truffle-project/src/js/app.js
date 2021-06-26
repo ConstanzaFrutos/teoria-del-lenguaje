@@ -50,7 +50,7 @@ App = {
       App.contracts.CartaItem.setProvider(App.web3Provider);
 
       // Use our contract to retrieve cartas
-      //return App.handleGetCartas();
+      return App.handleInitPage();
     });
 
     $.getJSON('CartaHelper.json', function(data) {
@@ -73,6 +73,30 @@ App = {
     $(document).on('click', '.btn-ver-mis-tokens', App.handleVerCantidadTokens);
 
     $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
+  },
+
+  handleInitPage() {
+    var cartaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      console.log(`Obteniendo balance de ${account}`);
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaInstance = instance;
+  
+        return cartaInstance.balanceOzToken({from: account});
+      }).then(function(balance) {
+        console.log(`La cantidad de tokens (OZT) disponibles es de: ${balance}`);
+        $('.balance-oz').text(`Tokens: ${balance}`);
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
   },
 
   handleClean() {

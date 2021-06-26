@@ -4,7 +4,7 @@
 * ===========
 */
 
-pragma solidity ^0.5.17;
+pragma solidity ^0.8.0;
 
 interface IERC20 {
     function totalSupply() external view returns (uint);
@@ -18,9 +18,8 @@ interface IERC20 {
 }
 
 contract Context {
-    constructor () internal { }
 
-    function _msgSender() internal view returns (address payable) {
+    function _msgSender() internal view returns (address) {
         return msg.sender;
     }
 }
@@ -33,26 +32,26 @@ contract ERC20 is Context, IERC20 {
     mapping (address => mapping (address => uint)) private _allowances;
 
     uint private _totalSupply;
-    function totalSupply() public view returns (uint) {
+    function totalSupply() public view override returns (uint) {
         return _totalSupply;
     }
-    function balanceOf(address account) public view returns (uint) {
+    function balanceOf(address account) public view override returns (uint) {
         return _balances[account];
     }
-    function transfer(address recipient, uint amount) public returns (bool) {
+    function transfer(address recipient, uint amount) public override returns (bool) {
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
-    function allowance(address owner, address spender) public view returns (uint) {
+    function allowance(address owner, address spender) public view override returns (uint) {
         return _allowances[owner][spender];
     }
-    function approve(address spender, uint amount) public returns (bool) {
+    function approve(address spender, uint amount) public override returns (bool) {
         _approve(_msgSender(), spender, amount);
         return true;
     }
-    function transferFrom(address sender, address recipient, uint amount) public returns (bool) {
+    function transferFrom(address sender, address recipient, uint amount) public override returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: el monto de la transferencia excede la asignación"));
+        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: el monto de la transferencia excede la asignacion"));
         return true;
     }
     function increaseAllowance(address spender, uint addedValue) public returns (bool) {
@@ -60,47 +59,46 @@ contract ERC20 is Context, IERC20 {
         return true;
     }
     function decreaseAllowance(address spender, uint subtractedValue) public returns (bool) {
-        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: disminución de la asignación por debajo de cero"));
+        _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: disminucion de la asignacion por debajo de cero"));
         return true;
     }
     function _transfer(address sender, address recipient, uint amount) internal {
-        require(sender != address(0), "ERC20: transferencia desde la dirección cero");
-        require(recipient != address(0), "ERC20: transferir a la dirección cero");
+        require(sender != address(0), "ERC20: transferencia desde la direccion cero");
+        require(recipient != address(0), "ERC20: transferir a la direccion cero");
 
-        _balances[sender] = _balances[sender].sub(amount, "ERC20: el monto de la transferencia excede el saldo");
         _balances[recipient] = _balances[recipient].add(amount);
         emit Transfer(sender, recipient, amount);
     }
     function _mint(address account, uint amount) internal {
-        require(account != address(0), "ERC20: agente a la dirección cero");
+        require(account != address(0), "ERC20: agente a la direccion cero");
 
         _totalSupply = _totalSupply.add(amount);
-        require(_totalSupply <= 1e24, "_totalSupply por exceder el límite máximo");
+        require(_totalSupply <= 1e24, "_totalSupply por exceder el limite maximo");
         _balances[account] = _balances[account].add(amount);
         emit Transfer(address(0), account, amount);
     }
     function _burn(address account, uint amount) internal {
-        require(account != address(0), "ERC20: quemar desde la dirección cero");
+        require(account != address(0), "ERC20: quemar desde la direccion cero");
 
         _balances[account] = _balances[account].sub(amount, "ERC20: la cantidad quemada excede el saldo");
         _totalSupply = _totalSupply.sub(amount);
         emit Transfer(account, address(0), amount);
     }
     function _approve(address owner, address spender, uint amount) internal {
-        require(owner != address(0), "ERC20: aprobar desde la dirección cero");
-        require(spender != address(0), "ERC20: aprobar a la dirección cero");
+        require(owner != address(0), "ERC20: aprobar desde la direccion cero");
+        require(spender != address(0), "ERC20: aprobar a la direccion cero");
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);
     }
 }
 
-contract ERC20Detailed is IERC20 {
+abstract contract ERC20Detailed is IERC20 {
     string private _name;
     string private _symbol;
     uint8 private _decimals;
 
-    constructor (string memory name, string memory symbol, uint8 decimals) public {
+    constructor (string memory name, string memory symbol, uint8 decimals) {
         _name = name;
         _symbol = symbol;
         _decimals = decimals;
@@ -143,7 +141,7 @@ library SafeMath {
         return c;
     }
     function div(uint a, uint b) internal pure returns (uint) {
-        return div(a, b, "SafeMath: división por cero");
+        return div(a, b, "SafeMath: division por cero");
     }
     function div(uint a, uint b, string memory errorMessage) internal pure returns (uint) {
         require(b > 0, errorMessage);
@@ -176,7 +174,7 @@ library SafeERC20 {
 
     function safeApprove(IERC20 token, address spender, uint value) internal {
         require((value == 0) || (token.allowance(address(this), spender) == 0),
-            "SafeERC20: error de aprobación invalida"
+            "SafeERC20: error de aprobacion invalida"
         );
         callOptionalReturn(token, abi.encodeWithSelector(token.approve.selector, spender, value));
     }
@@ -186,7 +184,7 @@ library SafeERC20 {
         require(success, "SafeERC20: falla en la llamada del contrato");
 
         if (returndata.length > 0) {
-            require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 la operación no tuvo éxito");
+            require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 la operacion no tuvo exito");
         }
     }
 }

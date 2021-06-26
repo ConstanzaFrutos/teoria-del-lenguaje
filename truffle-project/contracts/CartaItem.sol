@@ -31,7 +31,7 @@ contract CartaItem is CartaHelper, ERC721 {
      * @return id de la carta creada
      */
     function crearCartaAleatoria() public returns (uint256) {
-        require(ozContract.balanceOf(msg.sender) >= costoCarta, "No tiene saldo suficiente");
+        require(ozContract.balanceOf(msg.sender) >= costoCarta, "No tiene saldo suficiente para realizar la carta");
         ozContract.transfer(ozAccount, costoCarta);
         uint256 descripcionAleatoria = _crearDescripcionAleatoria();
         uint8 tipoAleatorio = _crearTipoAleatorio();
@@ -48,9 +48,10 @@ contract CartaItem is CartaHelper, ERC721 {
     }
 
     function _transfer(address _from, address _to, uint256 _tokenId) private {
-        require(ozContract.balanceOf(_from) >= costoTransferencia, "No tiene saldo disponible");
-        ozContract.transferFrom(msg.sender, _to, costoTransferencia);
-        //Agregamos comision?
+        require(ozContract.balanceOf(_from) >= costoTransferencia, "No tiene saldo suficiente para realizar la transferencia");
+        ozContract.transfer(_to, costoTransferencia);
+        ozContract.transfer(ozAccount, costoTransferencia * 0.1); // Comision
+        
         personaCantidadCartas[_to]++;
         personaCantidadCartas[_from]--;
         cartaAPersona[_tokenId] = _to;

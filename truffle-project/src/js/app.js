@@ -70,6 +70,7 @@ App = {
     $(document).on('click', '.btn-crear-carta', App.handleCrearCarta);
     $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
+    $(document).on('click', '.btn-ver-mis-tokens', App.handleVerCantidadTokens);
 
     $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
   },
@@ -227,22 +228,9 @@ App = {
       App.contracts.CartaItem.deployed().then(function(instance) {
         cartaInstance = instance;
   
-        //Hacer esto con balanceOf
-        return cartaInstance.getCartasDe(account);
-      }).then(function(cartas) {
-        const [descripciones, tipos] = cartas;
-        tipoCarta = 'Epica';
-        console.table(descripciones);
-        
-        for (i = 0; i < descripciones.length; i++) {
-          if (tipos[i] == 1) {
-            tipoCarta == 'Normal';
-          } else if (tipos[i] == 2) {
-            tipoCarta == 'Rara';
-          }
-          const node = App.copyTemplate(tipoCarta, descripciones[i], i);
-          listaCartas.appendChild(node);
-        }
+        return cartaInstance.balanceOzToken({from: account});
+      }).then(function(balance) {
+        alert(`La cantidad de tokens (OZT) disponibles es de: ${balance}`);
       }).catch(function(err) {
         console.log(err.message);
       });

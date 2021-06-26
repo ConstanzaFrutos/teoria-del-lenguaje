@@ -2,7 +2,6 @@ App = {
   web3Provider: null,
   contracts: {},
   listaCartas: null,
-  listaCartas: null,
   template: null,
 
 
@@ -208,6 +207,42 @@ App = {
         alert(`Carta ${cartaId} transferida de ${account} a ${direccionDestino}`);
         location.reload();
         return;
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  handleVerCantidadTokens: function() {
+    var cartaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      alert(`Obteniendo balance de ${account}`);
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaInstance = instance;
+  
+        //Hacer esto con balanceOf
+        return cartaInstance.getCartasDe(account);
+      }).then(function(cartas) {
+        const [descripciones, tipos] = cartas;
+        tipoCarta = 'Epica';
+        console.table(descripciones);
+        
+        for (i = 0; i < descripciones.length; i++) {
+          if (tipos[i] == 1) {
+            tipoCarta == 'Normal';
+          } else if (tipos[i] == 2) {
+            tipoCarta == 'Rara';
+          }
+          const node = App.copyTemplate(tipoCarta, descripciones[i], i);
+          listaCartas.appendChild(node);
+        }
       }).catch(function(err) {
         console.log(err.message);
       });

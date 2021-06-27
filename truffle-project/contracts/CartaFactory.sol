@@ -66,7 +66,7 @@ contract CartaFactory is Ownable {
     }
 
     modifier soloDuenioDe(uint _cartaId) {
-        require (msg.sender == cartaAPersona[_cartaId]);
+        require (msg.sender == cartaAPersona[_cartaId], "Solo el duenio de la carta puede realizar esta transaccion");
         _;
     }
 

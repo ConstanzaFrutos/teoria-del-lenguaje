@@ -84,6 +84,9 @@ contract CartaItem is CartaHelper, ERC721 {
         return ozContract.balanceOf(msg.sender);
     }
 
+    /**
+     * @dev Para cambiar la direccion del contrato OzToken
+     */
     function setOzTokenAddress(address _ozTokenAddress) public onlyOwner {
         ozAddress = _ozTokenAddress;
         ozContract = OzInterface(ozAddress);

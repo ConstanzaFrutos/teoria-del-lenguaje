@@ -15,8 +15,7 @@ interface OzInterface {
  * @dev Funciones de administracion de cartas como 
  * compra de las mismas o transferencia de ownership
  */
-contract CartaItem is CartaHelper, ERC721 {
-
+contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
     address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
     OzInterface ozContract = OzInterface(ozAddress);
 
@@ -26,6 +25,8 @@ contract CartaItem is CartaHelper, ERC721 {
     address ozAccount = 0x1C53954455A6796723B52021c034964DD9E329dE;
 
     mapping (uint => address) cartaApprovals;
+
+    constructor() public ERC721Metadata("CartaItem", "CITM") {}
 
     /**
      * @dev Crea una carta aleatoria

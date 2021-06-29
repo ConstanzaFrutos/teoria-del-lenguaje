@@ -33,11 +33,13 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
      * @return id de la carta creada
      */
     function crearCartaAleatoria() public returns (uint256) {
+        require(msg.sender != address(0), "Error: direccion cero creando carta");
         require(ozContract.balanceOf(msg.sender) >= costoCarta, "No tiene saldo suficiente para realizar la carta");
         ozContract.transferFrom(msg.sender, ozAccount, costoCarta);
         uint256 descripcionAleatoria = _crearDescripcionAleatoria();
         uint8 tipoAleatorio = _crearTipoAleatorio();
         _crearCarta(descripcionAleatoria, tipoAleatorio);
+        emit Transfer(address(0), msg.sender, 1);
         return cartas.length - 1;
     }
 

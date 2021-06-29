@@ -92,6 +92,8 @@ App = {
         return cartaInstance.balanceOzToken({from: account});
       }).then(function(balance) {
         console.log(`La cantidad de tokens (OZT) disponibles es de: ${balance}`);
+        $('.cuenta-actual-nombre').text(`Nombre cuenta actual: ${account}`);
+        $('.cuenta-actual-direccion').text(`Dirección cuenta actual: ${account}`);
         $('.balance-oz').text(`Tokens: ${balance}`);
       }).catch(function(err) {
         console.log(err.message);

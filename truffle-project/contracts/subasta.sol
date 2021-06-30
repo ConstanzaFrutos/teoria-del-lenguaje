@@ -65,15 +65,15 @@ contract Subasta{
         uint ofertaMaxima = ofertasLicitadores[mejorLicitador];
 
         if(totalNuevaOferta <= ofertaMaxima){
-            maximaOfertaLicitador = Maths.minimo(totalNuevaOferta + incrementoOferta, ofertaMaxima);
+            maximaOfertaLicitador = _calcularMinimo(totalNuevaOferta + incrementoOferta, ofertaMaxima);
         }else{
             if(msg.sender != mejorLicitador){
                 mejorLicitador = msg.sender; 
-                maximaOfertaLicitador = Maths.minimo(totalNuevaOferta, ofertaMaxima + incrementoOferta);
+                maximaOfertaLicitador = _calcularMinimo(totalNuevaOferta, ofertaMaxima + incrementoOferta);
             }
             ofertaMaxima = totalNuevaOferta;
         }
-        RegistrarOferta(msg.sender,totalNuevaOferta, mejorLicitador);
+        emit RegistrarOferta(msg.sender,totalNuevaOferta, mejorLicitador);
         return true;
     }
 
@@ -104,7 +104,7 @@ contract Subasta{
 
         require (!payable(msg.sender).send(cantidadARetirar), "Hubo un error al retirar la oferta."); 
 
-        RegistrarRetiro(msg.sender, cuentaQueRetira, cantidadARetirar);
+        emit RegistrarRetiro(msg.sender, cuentaQueRetira, cantidadARetirar);
         return true;
     }
 
@@ -112,15 +112,14 @@ contract Subasta{
     function cancelarSubasta() public soloSiEsduenio soloAntesDelFin soloSiNoFueCancelada 
     returns (bool success){
         cancelada = true; 
-        RegistroCancelacion();
+        emit RegistroCancelacion();
         return cancelada;
     }
 
-//Bueno para mencionar lo facil que es la creacion de las librerias.
-
-
-// Modifiers -> Bueno para comentarlos en el video.
-// lo mismo con msg...
+    function _calcularMinimo(uint a, uint b) private view returns (uint){
+        if (a < b) return a;
+        return b;
+    }
 
     modifier soloSiEsduenio{
         require (msg.sender != duenio, "Solo el duenio puede realizar esta accion.");
@@ -153,11 +152,4 @@ contract Subasta{
     }
     
  }
-
-library Maths{
-    function minimo(uint a, uint b) public view returns (uint){
-        if (a < b) return a;
-        return b;
-    }
-}
 

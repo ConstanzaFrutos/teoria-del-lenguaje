@@ -47,6 +47,10 @@ contract Subasta{
         return mejorLicitador;
     }
 
+    function estaCancelada() public view returns(bool){
+        return cancelada;
+    }
+
 
     function ofertar() public payable soloDespuesDelComienzo soloAntesDelFin soloSiNoFueCancelada 
         soloSiNoEsduenio returns (bool success){

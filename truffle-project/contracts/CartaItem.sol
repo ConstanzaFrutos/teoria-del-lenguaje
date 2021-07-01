@@ -15,8 +15,7 @@ interface OzInterface {
  * @dev Funciones de administracion de cartas como 
  * compra de las mismas o transferencia de ownership
  */
-contract CartaItem is CartaHelper, ERC721 {
-
+contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
     address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
     OzInterface ozContract = OzInterface(ozAddress);
 
@@ -27,16 +26,20 @@ contract CartaItem is CartaHelper, ERC721 {
 
     mapping (uint => address) cartaApprovals;
 
+    constructor() public ERC721Metadata("CartaItem", "CITM") {}
+
     /**
      * @dev Crea una carta aleatoria
      * @return id de la carta creada
      */
     function crearCartaAleatoria() public returns (uint256) {
+        require(msg.sender != address(0), "Error: direccion cero creando carta");
         require(ozContract.balanceOf(msg.sender) >= costoCarta, "No tiene saldo suficiente para realizar la carta");
         ozContract.transferFrom(msg.sender, ozAccount, costoCarta);
         uint256 descripcionAleatoria = _crearDescripcionAleatoria();
         uint8 tipoAleatorio = _crearTipoAleatorio();
         _crearCarta(descripcionAleatoria, tipoAleatorio);
+        emit Transfer(address(0), msg.sender, 1);
         return cartas.length - 1;
     }
 

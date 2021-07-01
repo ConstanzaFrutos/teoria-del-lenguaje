@@ -79,6 +79,7 @@ contract ERC20 is Context, IERC20 {
         _balances[account] = _balances[account].add(amount);
         emit Transfer(address(0), account, amount);
     }
+    
     function _burn(address account, uint amount) internal {
         require(account != address(0), "ERC20: quemar desde la direccion cero");
 

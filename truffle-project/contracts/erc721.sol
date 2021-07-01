@@ -10,3 +10,27 @@ interface ERC721 {
   function approve(address _to, uint256 _tokenId) external;
   function takeOwnership(uint256 _tokenId) external;
 }
+
+contract ERC721Metadata {
+  // Nombre del token
+  string private _name;
+
+  // Simbolo del token
+  string private _symbol;
+
+  /**
+    * @dev Inicializa el contrato con un nombre y un simbolo
+    */
+  constructor(string memory name_, string memory symbol_) {
+      _name = name_;
+      _symbol = symbol_;
+  }
+
+  function name() public view returns (string memory) {
+      return _name;
+  }
+  
+  function symbol() public view returns (string memory) {
+      return _symbol;
+  }
+}

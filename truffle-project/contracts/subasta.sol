@@ -26,8 +26,8 @@ contract Subasta{
     event RegistroCancelacion();
 
     constructor (address _duenio, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal){
-        require (_tiempoInicial >= _tiempoFinal, "El tiempo inicial deberia ser menor al tiempo final") ; 
-        require (_tiempoInicial >= block.number);
+        require (_tiempoInicial <= _tiempoFinal, "El tiempo inicial deberia ser menor al tiempo final") ; 
+        require (_tiempoInicial <= block.number);
         require (_duenio == address(0), "Se necesita una cuenta para iniciar una subasta."); 
 
         duenio = _duenio;

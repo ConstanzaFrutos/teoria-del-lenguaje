@@ -2,7 +2,6 @@ App = {
   web3Provider: null,
   contracts: {},
   listaCartas: null,
-  listaCartas: null,
   template: null,
 
 
@@ -51,7 +50,7 @@ App = {
       App.contracts.CartaItem.setProvider(App.web3Provider);
 
       // Use our contract to retrieve cartas
-      //return App.handleGetCartas();
+      return App.handleInitPage();
     });
 
     $.getJSON('CartaHelper.json', function(data) {
@@ -71,8 +70,35 @@ App = {
     $(document).on('click', '.btn-crear-carta', App.handleCrearCarta);
     $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
+    $(document).on('click', '.btn-ver-mis-tokens', App.handleVerCantidadTokens);
 
     $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
+  },
+
+  handleInitPage() {
+    var cartaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      console.log(`Obteniendo balance de ${account}`);
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaInstance = instance;
+  
+        return cartaInstance.balanceOzToken({from: account});
+      }).then(function(balance) {
+        console.log(`La cantidad de tokens (OZT) disponibles es de: ${balance}`);
+        $('.cuenta-actual-nombre').text(`Nombre cuenta actual: ${account}`);
+        $('.cuenta-actual-direccion').text(`Dirección cuenta actual: ${account}`);
+        $('.balance-oz').text(`Tokens: ${balance}`);
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
   },
 
   handleClean() {
@@ -80,6 +106,7 @@ App = {
   },
 
   handleGetCartas() {
+    //TODO mostrar duenio
     var cartaInstance;
 
     App.contracts.CartaItem.deployed().then(function(instance) {
@@ -120,9 +147,9 @@ App = {
   
         return cartaInstance.getCartasDe(account);
       }).then(function(cartas) {
-        const [descripciones, tipos] = cartas;
+        const [ids, descripciones, tipos] = cartas;
         tipoCarta = 'Epica';
-        console.table(descripciones);
+        console.log(ids);
         
         for (i = 0; i < descripciones.length; i++) {
           if (tipos[i] == 1) {
@@ -130,7 +157,7 @@ App = {
           } else if (tipos[i] == 2) {
             tipoCarta == 'Rara';
           }
-          const node = App.copyTemplate(tipoCarta, descripciones[i], i);
+          const node = App.copyTemplate(tipoCarta, descripciones[i], ids[i]);
           listaCartas.appendChild(node);
         }
       }).catch(function(err) {
@@ -208,6 +235,29 @@ App = {
         alert(`Carta ${cartaId} transferida de ${account} a ${direccionDestino}`);
         location.reload();
         return;
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  handleVerCantidadTokens: function() {
+    var cartaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      alert(`Obteniendo balance de ${account}`);
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaInstance = instance;
+  
+        return cartaInstance.balanceOzToken({from: account});
+      }).then(function(balance) {
+        alert(`La cantidad de tokens (OZT) disponibles es de: ${balance}`);
       }).catch(function(err) {
         console.log(err.message);
       });

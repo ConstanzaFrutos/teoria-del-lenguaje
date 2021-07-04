@@ -37,7 +37,7 @@ contract CartaFactory is Ownable {
      * @dev Crea una instancia de carta
      * @param _descripcion descripcion para crear la carta
      */
-    function _crearCarta(uint256 _descripcion, uint8 _tipo) private {
+    function _crearCarta(uint256 _descripcion, uint8 _tipo) internal {
         cartas.push(Carta(_descripcion, _tipo));
         uint id = cartas.length - 1;
         cartaAPersona[id] = msg.sender;
@@ -49,7 +49,7 @@ contract CartaFactory is Ownable {
      * @dev Crea un valor aleatorio de descripcion 
      * @return valor aleatorio de descripcion
      */
-    function _crearDescripcionAleatoria() private returns (uint256){
+    function _crearDescripcionAleatoria() internal returns (uint256){
         semillaDescripcion ++;
         uint256 descripcionAleatoria = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, semillaDescripcion)));
         return descripcionAleatoria % modulo;
@@ -59,25 +59,14 @@ contract CartaFactory is Ownable {
      * @dev Crea un tipo de carta aleatorio
      * @return valor aleatorio de tipo de carta
      */
-    function _crearTipoAleatorio() private returns (uint8){
+    function _crearTipoAleatorio() internal returns (uint8){
         semillaTipo ++;
         uint256 tipoAleatorio = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, semillaTipo)));
         return uint8(tipoAleatorio % cantidadTipos);
     }
-    
-    /**
-     * @dev Crea una carta aleatoria
-     * @return id de la carta creada
-     */
-    function crearCartaAleatoria() public returns (uint256) {
-        uint256 descripcionAleatoria = _crearDescripcionAleatoria();
-        uint8 tipoAleatorio = _crearTipoAleatorio();
-        _crearCarta(descripcionAleatoria, tipoAleatorio);
-        return cartas.length - 1;
-    }
 
     modifier soloDuenioDe(uint _cartaId) {
-        require (msg.sender == cartaAPersona[_cartaId]);
+        require (msg.sender == cartaAPersona[_cartaId], "Solo el duenio de la carta puede realizar esta transaccion");
         _;
     }
 

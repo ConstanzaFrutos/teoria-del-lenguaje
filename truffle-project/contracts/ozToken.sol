@@ -18,9 +18,8 @@ interface IERC20 {
 }
 
 contract Context {
-    constructor () internal { }
 
-    function _msgSender() internal view returns (address payable) {
+    function _msgSender() internal view returns (address) {
         return msg.sender;
     }
 }
@@ -33,26 +32,25 @@ contract ERC20 is Context, IERC20 {
     mapping (address => mapping (address => uint)) private _allowances;
 
     uint private _totalSupply;
-    function totalSupply() public view returns (uint) {
+    function totalSupply() public view override returns (uint) {
         return _totalSupply;
     }
-    function balanceOf(address account) public view returns (uint) {
+    function balanceOf(address account) public view override returns (uint) {
         return _balances[account];
     }
-    function transfer(address recipient, uint amount) public returns (bool) {
+    function transfer(address recipient, uint amount) public override returns (bool) {
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
-    function allowance(address owner, address spender) public view returns (uint) {
+    function allowance(address owner, address spender) public view override returns (uint) {
         return _allowances[owner][spender];
     }
-    function approve(address spender, uint amount) public returns (bool) {
+    function approve(address spender, uint amount) public override returns (bool) {
         _approve(_msgSender(), spender, amount);
         return true;
     }
-    function transferFrom(address sender, address recipient, uint amount) public returns (bool) {
+    function transferFrom(address sender, address recipient, uint amount) public override returns (bool) {
         _transfer(sender, recipient, amount);
-        _approve(sender, _msgSender(), _allowances[sender][_msgSender()].sub(amount, "ERC20: el monto de la transferencia excede la asignacion"));
         return true;
     }
     function increaseAllowance(address spender, uint addedValue) public returns (bool) {
@@ -63,6 +61,7 @@ contract ERC20 is Context, IERC20 {
         _approve(_msgSender(), spender, _allowances[_msgSender()][spender].sub(subtractedValue, "ERC20: disminucion de la asignacion por debajo de cero"));
         return true;
     }
+
     function _transfer(address sender, address recipient, uint amount) internal {
         require(sender != address(0), "ERC20: transferencia desde la direccion cero");
         require(recipient != address(0), "ERC20: transferir a la direccion cero");
@@ -71,6 +70,7 @@ contract ERC20 is Context, IERC20 {
         _balances[recipient] = _balances[recipient].add(amount);
         emit Transfer(sender, recipient, amount);
     }
+
     function _mint(address account, uint amount) internal {
         require(account != address(0), "ERC20: agente a la direccion cero");
 
@@ -79,6 +79,7 @@ contract ERC20 is Context, IERC20 {
         _balances[account] = _balances[account].add(amount);
         emit Transfer(address(0), account, amount);
     }
+    
     function _burn(address account, uint amount) internal {
         require(account != address(0), "ERC20: quemar desde la direccion cero");
 
@@ -95,12 +96,12 @@ contract ERC20 is Context, IERC20 {
     }
 }
 
-contract ERC20Detailed is IERC20 {
+abstract contract ERC20Detailed is IERC20 {
     string private _name;
     string private _symbol;
     uint8 private _decimals;
 
-    constructor (string memory name, string memory symbol, uint8 decimals) public {
+    constructor (string memory name, string memory symbol, uint8 decimals) {
         _name = name;
         _symbol = symbol;
         _decimals = decimals;

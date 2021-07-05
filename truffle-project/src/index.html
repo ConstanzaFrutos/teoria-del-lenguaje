@@ -10,6 +10,12 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
+    <link href="css/styles.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -26,59 +32,91 @@
           <h4 class="cuenta-actual-direccion"></h4>
           <hr/>
         </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-8 col-sm-push-2 text-center">
+            <select id="view-select">
+              <option value="inicio-view" selected>Seleccione su vista</option>
+              <option value="carta-view">Carta</option>
+              <option value="token-view">Token</option>
+              <option value="subasta-admin-view">Subasta Admin</option>
+              <option value="subasta-view">Subasta</option>
+            </select>
+          </div>
+        </div> 
       </div>
     </div>
 
-    <div>
-      <button class="btn btn-default btn-clean" type="button">Limpiar</button>
-      <button class="btn btn-default btn-ver-todas-las-cartas" type="button">Ver todas las cartas</button>
-      <button class="btn btn-default btn-ver-mis-cartas" type="button">Ver mis cartas</button>
-      <button class="btn btn-default btn-crear-carta" type="button">Crear carta</button>
-      <button class="btn btn-default btn-ver-mis-tokens" type="button">Ver mis Tokens</button>
-      <span class="balance-oz" style="border-color: black; border: solid"></span>
+    <div id="inicio-view" class="container view-container">
+      <h1 class="text-center">¡Bienvenido a la subsata!</h1>
     </div>
 
-    <div>
-      <ul class="cartas-list">
-      </ul>
-    </div>
+    <div id="carta-view" class="container view-container">
+      <h1 class="text-center">Carta</h1>
+      <div class="row">
+        <span class="col-xs-8 col-xs-push-2 balance-oz" style="border-color: black; border: solid"></span>
+      </div>  
+      <div class="row">  
+        <div class="col-xs-4"><button class="btn btn-default btn-clean" type="button">Limpiar</button></div>
+        <div class="col-xs-4"><button class="btn btn-default btn-ver-todas-las-cartas" type="button">Ver todas las cartas</button></div>
+        <div class="col-xs-4"><button class="btn btn-default btn-ver-mis-cartas" type="button">Ver mis cartas</button></div>
+        <div class="col-xs-4"><button class="btn btn-default btn-crear-carta" type="button">Crear carta</button></div>
+        <div class="col-xs-4"><button class="btn btn-default btn-ver-mis-tokens" type="button">Ver mis Tokens</button></div>
+      </div>
 
-    <template>
-      <li class="carta">
-        <form class="form-transferencia" id="form-transferencia">
-          <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
-            <p class="id-carta">
-              Id: <span></span>
-            </p>
-            <p class="tipo-carta">
-              Tipo: <b></b>
-            </p>
-            <p class="descripcion-carta">
-              Decripcion: <b></b>
-            </p>
-            <label for="direccion-destino">Dirección a la cual transferir: </label>
-            <input type="text" class="direccion-destino" id="direccion-destino" name="direccion-destino">
-            <input type="text" class="id-carta" name="id-carta">
-            <button class="btn btn-default btn-transferir" type="submit">Transferir carta</button>
-          </div>
-        </form>
-      </li>
-    </template>
+      <div>
+        <ul class="cartas-list">
+        </ul>
+      </div>
 
-    <div id="cartaTemplate" style="display: none;">
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="panel panel-default panel-carta">
-          <div class="panel-heading">
-            <h3 class="panel-title">Carta</h3>
-          </div>
-          <div class="panel-body">
-            <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://http2.mlstatic.com/D_NQ_NP_719937-MLA28791890860_112018-O.webp" data-holder-rendered="true">
-            <br/><br/>
-            <strong>Tipo</strong>: <span class="tipo-carta" type="tipo-carta">tipo</span><br/>
-            <strong>Descripcion</strong>: <span class="descripcion-carta" type="descripcion-carta">descripcion</span><br/>
+      <template>
+        <li class="carta">
+          <form class="form-transferencia" id="form-transferencia">
+            <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
+              <p class="id-carta">
+                Id: <span></span>
+              </p>
+              <p class="tipo-carta">
+                Tipo: <b></b>
+              </p>
+              <p class="descripcion-carta">
+                Decripcion: <b></b>
+              </p>
+              <label for="direccion-destino">Dirección a la cual transferir: </label>
+              <input type="text" class="direccion-destino" id="direccion-destino" name="direccion-destino">
+              <input type="text" class="id-carta" name="id-carta">
+              <button class="btn btn-default btn-transferir" type="submit">Transferir carta</button>
+            </div>
+          </form>
+        </li>
+      </template>
+
+      <div id="cartaTemplate" style="display: none;">
+        <div class="col-sm-6 col-md-4 col-lg-3">
+          <div class="panel panel-default panel-carta">
+            <div class="panel-heading">
+              <h3 class="panel-title">Carta</h3>
+            </div>
+            <div class="panel-body">
+              <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://http2.mlstatic.com/D_NQ_NP_719937-MLA28791890860_112018-O.webp" data-holder-rendered="true">
+              <br/><br/>
+              <strong>Tipo</strong>: <span class="tipo-carta" type="tipo-carta">tipo</span><br/>
+              <strong>Descripcion</strong>: <span class="descripcion-carta" type="descripcion-carta">descripcion</span><br/>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div id="token-view" class="container view-container">
+      <h1 class="text-center">Token</h1>
+    </div>
+
+    <div id="subasta-admin-view" class="container view-container">
+      <h1 class="text-center">Subasta Admin</h1>
+    </div>
+
+    <div id="subasta-view" class="container view-container">
+      <h1 class="text-center">Subasta</h1>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -88,5 +126,6 @@
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/custom.js"></script>
   </body>
 </html>

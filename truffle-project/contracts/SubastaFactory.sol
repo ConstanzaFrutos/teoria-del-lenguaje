@@ -16,8 +16,8 @@ contract SubastaFactory {
     function subastaFactory() public {
     }
 
-    function crearSubasta(uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public {
-        Subasta nuevaSubasta = new Subasta(msg.sender, _incrementoOferta, _tiempoInicial, _tiempoFinal);
+    function crearSubasta(uint cartaId, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public {
+        Subasta nuevaSubasta = new Subasta(msg.sender,cartaId, _incrementoOferta, _tiempoInicial, _tiempoFinal);
         subastas[idSubasta];
         idSubasta ++;
         SubastaCreada(nuevaSubasta, msg.sender, idSubasta);

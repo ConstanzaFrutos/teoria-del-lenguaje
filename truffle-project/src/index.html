@@ -35,6 +35,9 @@
       <button class="btn btn-default btn-ver-mis-cartas" type="button">Ver mis cartas</button>
       <button class="btn btn-default btn-crear-carta" type="button">Crear carta</button>
       <button class="btn btn-default btn-ver-mis-tokens" type="button">Ver mis Tokens</button>
+      <button class="btn btn-default btn-crear-subasta" type="button"> Crear subasta</button>
+      <button class="btn btn-default btn-finalizar-subasta" type="button">Finalizar subasta</button>
+      <button class="btn btn-default btn-retirar-oferta-subasta" type="button">Retirar oferta subasta</button>
       <span class="balance-oz" style="border-color: black; border: solid"></span>
     </div>
 
@@ -59,6 +62,24 @@
             <label for="direccion-destino">Dirección a la cual transferir: </label>
             <input type="text" class="direccion-destino" id="direccion-destino" name="direccion-destino">
             <input type="text" class="id-carta" name="id-carta">
+            <button class="btn btn-default btn-transferir" type="submit">Transferir carta</button>
+          </div>
+        </form>
+      </li>
+    </template>
+
+    <template>
+      <li class="carta">
+        <form class="form-subastar" id="form-subastar">
+          <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
+
+            <label for="direccion-destino">Id de la carta: </label>
+
+            <input type="text" class="id-carta" name="id-carta">
+            <input type="text" class="incrementoMinimo" name="incrementoMinimo">
+            <input type="text" class="tiempoInicial" name="tiempoInicial">
+            <input type="text" class="tiempoFinal" name="tiempoFinal">
+
             <button class="btn btn-default btn-transferir" type="submit">Transferir carta</button>
           </div>
         </form>

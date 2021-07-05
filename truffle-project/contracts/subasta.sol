@@ -6,6 +6,7 @@ contract Subasta{
     //Datos estaticos - no cambian nunca dentro del SC
 
     address public duenio; // duenio del objeto a subastar
+    uint cartaId; //tiempo de comienzo de la subasta
     uint public tiempoInicial; //tiempo de comienzo de la subasta
     uint public tiempoFinal;  // tiempo de fin de la subasta
     uint public incrementoOferta; //incremento minimo entre ofertas
@@ -25,12 +26,14 @@ contract Subasta{
     event RegistrarRetiro(address licitadorRetirado, address cuentaLicidatorRetirado, uint oferta);
     event RegistroCancelacion();
 
-    constructor (address _duenio, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal){
+    constructor (address _duenio,uint _cartaId, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal){
         require (_tiempoInicial <= _tiempoFinal, "El tiempo inicial deberia ser menor al tiempo final") ; 
         require (_tiempoInicial <= block.number);
-        require (_duenio != address(0), "Se necesita una cuenta para iniciar una subasta."); 
+        require (_duenio != address(0), "Se necesita una cuenta para iniciar una subasta.");
+        require (_cartaId != 0 , "Se necesita una carta para iniciar una subasta.");
 
         duenio = _duenio;
+        cartaId = _cartaId;
         incrementoOferta = _incrementoOferta;
         tiempoInicial = _tiempoInicial;
         tiempoFinal = _tiempoFinal;
@@ -50,6 +53,7 @@ contract Subasta{
     function estaCancelada() public view returns(bool){
         return cancelada;
     }
+
 
 
     function ofertar() public payable soloDespuesDelComienzo soloAntesDelFin soloSiNoFueCancelada 

@@ -2,6 +2,7 @@ App = {
   web3Provider: null,
   contracts: {},
   listaCartas: null,
+  subastaActual : null,
   template: null,
 
 
@@ -36,7 +37,7 @@ App = {
 
     listaCartas = document.querySelector(".cartas-list");
     template = document.querySelector("template");
-
+    subasta = document.querySelector(".cartas-list");
     return App.initContract();
   },
 
@@ -51,6 +52,15 @@ App = {
 
       // Use our contract to retrieve cartas
       return App.handleInitPage();
+    });
+
+    $.getJSON('SubastaFactory.json', function(data) {
+      // Get the necessary contract artifact file and instantiate it with @truffle/contract
+      var SubastaFactoryArtifact = data;
+      App.contracts.SubastaFactory = TruffleContract(SubastaFactoryArtifact);
+
+      // Set the provider for our contract
+      App.contracts.SubastaFactory.setProvider(App.web3Provider);
     });
 
     $.getJSON('CartaHelper.json', function(data) {
@@ -71,8 +81,12 @@ App = {
     $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
     $(document).on('click', '.btn-ver-mis-tokens', App.handleVerCantidadTokens);
-
     $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
+    $(document).on('click', '.btn-comenzar-subasta', App.handleComenzarSubasta);
+
+    $(document).on('click', '.btn-cancelar-subasta', App.handleCancelarSubasta);
+    $(document).on('click', '.btn-ofertar-subasta', App.handleOfertarSubasta);
+    $(document).on('click', '.btn-retirar-subasta', App.handleRetirarOfertaEnSubasta);
   },
 
   handleInitPage() {
@@ -239,6 +253,123 @@ App = {
         console.log(err.message);
       });
     });
+  },
+
+
+  handleComenzarSubasta: function(event) {
+    event.preventDefault();
+
+    var data = $("#form-subasta :input").serializeArray();
+    var subastaFactoryInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      var cartaId = data[0].value;
+      var incrementoMinimo = data[1].value;
+      var tiempoInicial = data[2].value;
+      var tiempoFinal = data[3].value;
+
+      App.contracts.SubastaFactory.deployed().then(function(instance) {
+        subastaFactoryInstance = instance;
+
+        return subastaFactoryInstance.crearSubasta(account, cartaId, incrementoMinimo, tiempoInicial, tiempoFinal, {from:account});
+      }).then(function(result) {
+
+        event.preventDefault();
+        alert(result)
+
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+
+  handleCancelarSubasta: function(event) {
+
+    event.preventDefault();
+
+    var subastaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+
+      App.contracts.SubastaFactory.deployed().then(function(instance) {
+        subastaFactoryInstance = instance;
+
+        return subastaInstance.cancelarSubasta( {from: account});
+      }).then(function(result) {
+        alert(`Subasta cancelada`);
+        location.reload();
+        return;
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+
+  },
+
+  handleOfertarSubasta: function(event) {
+
+    event.preventDefault();
+
+    var subastaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+      App.contracts.Subasta.deployed().then(function(instance) {
+        subastaInstance = instance;
+        if (subastaInstance.estaCancelada() != False){
+          alert(`La subasta ha finalizado o esta cancelada`);
+          return;
+        }
+        return subastaInstance.ofertar( {from: account, payable});
+      }).then(function(result) {
+        location.reload();
+        return;
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+
+  },
+
+  handleRetirarOfertaEnSubasta: function(event) {
+
+    event.preventDefault();
+
+    var subastaInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+      App.contracts.Subasta.deployed().then(function(instance) {
+        subastaInstance = instance;
+
+        return subastaInstance.retirarFondos( {from: account, payable});
+      }).then(function(result) {
+        location.reload();
+        return;
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+
   },
 
   handleVerCantidadTokens: function() {

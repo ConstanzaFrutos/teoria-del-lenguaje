@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:origin/rama_subasta" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9c858dc0-2ad2-44b8-a3f2-684a5e017380" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/Address.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/CartaFactory.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/CartaHelper.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/CartaItem.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/Context.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/ERC20.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/ERC20Detailed.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/ERC721.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/ERC721Metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/IERC20.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/Migrations.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/Ownable.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/OzInterface.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/OzToken.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/SafeERC20.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/SafeMath.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/Subasta.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/build/contracts/SubastaFactory.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/contracts/SubastaFactory.sol" beforeDir="false" afterPath="$PROJECT_DIR$/truffle-project/contracts/SubastaFactory.sol" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/truffle-project/src/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/truffle-project/src/js/app.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="rama_subasta" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$APPLICATION_HOME_DIR$/plugins/maven/lib/maven3" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1ujnwHJ4nErvbk29NUEzg5Brmw2" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/truffle-project/src/js/app.js" working-dir="$PROJECT_DIR$/truffle-project/src/js">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.app.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9c858dc0-2ad2-44b8-a3f2-684a5e017380" name="Default Changelist" comment="" />
+      <created>1625188102938</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1625188102938</updated>
+      <workItem from="1625188104001" duration="5287000" />
+      <workItem from="1625266255781" duration="2020000" />
+      <workItem from="1625313767781" duration="3088000" />
+      <workItem from="1625321830803" duration="11593000" />
+      <workItem from="1625412235875" duration="2100000" />
+      <workItem from="1625433915042" duration="10598000" />
+      <workItem from="1625497154297" duration="186000" />
+      <workItem from="1625497621361" duration="1561000" />
+      <workItem from="1625517634297" duration="1181000" />
+      <workItem from="1625524341740" duration="2051000" />
+      <workItem from="1625575600741" duration="6126000" />
+      <workItem from="1625620145701" duration="900000" />
+      <workItem from="1625667073302" duration="4672000" />
+      <workItem from="1625712770773" duration="338000" />
+      <workItem from="1625870976028" duration="598000" />
+      <workItem from="1625930062564" duration="13739000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/rama_subasta" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="442" y="230" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1625314126274">
+      <screen x="0" y="25" width="1440" height="798" />
+    </state>
+    <state x="442" y="230" key="#com.intellij.fileTypes.FileTypeChooser/0.25.1440.798@0.25.1440.798" timestamp="1625314126274" />
+    <state width="1398" height="203" key="GridCell.Tab.0.bottom" timestamp="1625937996569">
+      <screen x="0" y="25" width="1440" height="798" />
+    </state>
+    <state width="1398" height="203" key="GridCell.Tab.0.bottom/0.25.1440.798@0.25.1440.798" timestamp="1625937996569" />
+    <state width="1398" height="203" key="GridCell.Tab.0.center" timestamp="1625937996568">
+      <screen x="0" y="25" width="1440" height="798" />
+    </state>
+    <state width="1398" height="203" key="GridCell.Tab.0.center/0.25.1440.798@0.25.1440.798" timestamp="1625937996568" />
+    <state width="1398" height="203" key="GridCell.Tab.0.left" timestamp="1625937996568">
+      <screen x="0" y="25" width="1440" height="798" />
+    </state>
+    <state width="1398" height="203" key="GridCell.Tab.0.left/0.25.1440.798@0.25.1440.798" timestamp="1625937996568" />
+    <state width="1398" height="203" key="GridCell.Tab.0.right" timestamp="1625937996568">
+      <screen x="0" y="25" width="1440" height="798" />
+    </state>
+    <state width="1398" height="203" key="GridCell.Tab.0.right/0.25.1440.798@0.25.1440.798" timestamp="1625937996568" />
+    <state x="68" y="91" width="1228" height="666" key="MergeDialog" timestamp="1625935840080">
+      <screen x="0" y="25" width="1440" height="798" />
+    </state>
+    <state x="68" y="91" width="1228" height="666" key="MergeDialog/0.25.1440.798@0.25.1440.798" timestamp="1625935840080" />
+    <state x="490" y="179" width="597" height="490" key="find.popup" timestamp="1625525291263">
+      <screen x="0" y="25" width="1440" height="798" />
+    </state>
+    <state x="490" y="179" width="597" height="490" key="find.popup/0.25.1440.798@0.25.1440.798" timestamp="1625525291263" />
+    <state x="490" y="194" width="597" height="538" key="find.popup/0.25.1440.875/-239.-1055.1920.978@0.25.1440.875" timestamp="1625435743277" />
+    <state x="507" y="140" key="git4idea.branch.GitSmartOperationDialog" timestamp="1625935693294">
+      <screen x="0" y="25" width="1440" height="798" />
+    </state>
+    <state x="507" y="140" key="git4idea.branch.GitSmartOperationDialog/0.25.1440.798@0.25.1440.798" timestamp="1625935693294" />
+    <state x="22" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1625686944376">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="22" y="196" width="670" height="676" key="search.everywhere.popup/0.0.1440.900@0.0.1440.900" timestamp="1625686944376" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/truffle-project/src/js/app.js</url>
+          <line>162</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

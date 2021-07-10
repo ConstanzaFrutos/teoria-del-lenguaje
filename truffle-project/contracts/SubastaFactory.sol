@@ -1,7 +1,16 @@
 pragma solidity ^0.8.0;
 
+interface OzInterface {
+    function balanceOf(address account) external view returns (uint);
+    function transfer(address recipient, uint amount) external returns (bool);
+    function approve(address spender, uint amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint amount) external returns (bool);
+}
 //Interfaz
 contract SubastaFactory{
+    address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
+    OzInterface ozContract = OzInterface(ozAddress);
+
     uint public idSubasta;
     Subasta[] public subastas;
     constructor(){
@@ -28,7 +37,7 @@ contract SubastaFactory{
     event RegistrarRetiro(address licitadorRetirado, address cuentaLicidatorRetirado, uint oferta);
     event RegistroCancelacion();
 
-    function crearSubasta (address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public returns (uint){
+    function crearSubasta (address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public returns(uint){
         require (_tiempoInicial <= _tiempoFinal, "El tiempo inicial deberia ser menor al tiempo final") ;
         require (_tiempoInicial <= block.number);
         require (_duenio != address(0), "Se necesita una cuenta para iniciar una subasta.");
@@ -57,6 +66,20 @@ contract SubastaFactory{
 
 
     //Bueno para comentar las precondiciones antes del codigo.
+    /**
+     * @dev Para cambiar la direccion del contrato OzToken
+     */
+    function setOzTokenAddress(address _ozTokenAddress) public onlyOwner {
+        ozAddress = _ozTokenAddress;
+        ozContract = OzInterface(ozAddress);
+    }
+
+    /**
+     * @dev Se setea la cuenta a la cual se le va a depositar el pago
+     */
+    function setOzAccountAddress(address _ozAccountAddress) public onlyOwner {
+        ozAccount = _ozAccountAddress;
+    }
 
     function getIdSubastasDisponibles() view public returns(uint[] memory){
         uint[] memory subastasDisponibles = new uint[](idSubasta);

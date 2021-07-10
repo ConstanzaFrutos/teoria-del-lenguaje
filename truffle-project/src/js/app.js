@@ -280,7 +280,8 @@ App = {
       }).then(function(result) {
 
         event.preventDefault();
-        alert(result)
+        console.log(result);
+        alert(`La subasta ${result} fue creada`);
 
       }).catch(function(err) {
         console.log(err.message);
@@ -346,7 +347,7 @@ App = {
 
   },
 
-  handleRetirarOfertaEnSubasta: function(event) {
+  handleRetirarFondosEnSubasta: function(event) {
 
     event.preventDefault();
 

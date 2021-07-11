@@ -258,12 +258,16 @@ App = {
 
   // Subasta
 
-  loadSubastaEnCurso: function (subasta) {
+  loadSubastaEnCurso: function (duenio, idCarta, tiempoInicial, tiempoFinal, incrementoMinimo) {
     let template = $(".subasta-en-curso").clone();
     template.removeClass('subasta-en-curso');
     template.removeAttr('hidden');
     template.addClass('subasta-en-curso-clone');
-    template.find("p.subasta-en-curso-id").html("Id de la subasta: " + subasta);
+    template.find("p.subasta-en-curso-duenio").html("Dueño de la subasta: " + duenio);
+    template.find("p.subasta-en-curso-id-carta").html("Id de la carta: " + idCarta);
+    template.find("p.subasta-en-curso-tiempo-inicial").html("Tiempo inicial: " + tiempoInicial);
+    template.find("p.subasta-en-curso-tiempo-final").html("Tiempo final: " + tiempoFinal);
+    template.find("p.subasta-en-curso-incremento-minimo").html("Incremento mínimo: " + incrementoMinimo);
     template.appendTo(".lista-subastas-en-curso");
   },
 
@@ -283,11 +287,26 @@ App = {
         return subastaFactoryInstance.getIdSubastasDisponibles();
       }).then(function(subastas) {
         console.log(subastas);
-        
         $(".lista-subastas-en-curso").empty();
+
+        let subastasPromise = [];
         for (i = 0; i < subastas.length; i++) {
-          App.loadSubastaEnCurso(subastas[i]);
+          console.log(subastas[i]*1);
+          subastasPromise.push(subastaFactoryInstance.subastas(subastas[i]*1));
         }
+      
+        Promise.all(subastasPromise).then(subastas => {
+          subastas.forEach(subasta => {
+            let duenio = subasta[0];
+            let cartaId = subasta[1] * 1;
+            let tiempoInicial = subasta[2] * 1;
+            let tiempoFinal = subasta[3] * 1;
+            let incrementoMinimo = subasta[4] * 1;
+            App.loadSubastaEnCurso(duenio, cartaId, tiempoInicial, tiempoFinal, incrementoMinimo);
+          });
+        }).catch(function(err) {
+          console.log(err.message);
+        });
       }).catch(function(err) {
         console.log(err.message);
       });

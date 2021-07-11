@@ -83,6 +83,7 @@ App = {
     $(document).on('click', '.btn-ver-mis-tokens', App.handleVerCantidadTokens);
     $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
     
+    $(document).on('click', '.btn-obtener-subastas-en-curso', App.handleObtenerSubastasEnCurso);
     $(document).on('click', '.btn-comenzar-subasta', App.handleComenzarSubasta);
     $(document).on('click', '.btn-cancelar-subasta', App.handleCancelarSubasta);
     $(document).on('click', '.btn-ofertar-subasta', App.handleOfertarSubasta);
@@ -255,6 +256,42 @@ App = {
     });
   },
 
+  // Subasta
+
+  loadSubastaEnCurso: function (subasta) {
+    let template = $(".subasta-en-curso").clone();
+    template.removeClass('subasta-en-curso');
+    template.addClass('subasta-en-curso-clone');
+    template.find("p.subasta-en-curso-id").html("Id de la subasta: " + subasta);
+    template.appendTo(".lista-subastas-en-curso");
+  },
+
+  handleObtenerSubastasEnCurso: function(event) {
+    var subastaFactoryInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      alert(`Obteniendo subastas en curso`);
+
+      App.contracts.SubastaFactory.deployed().then(function(instance) {
+        subastaFactoryInstance = instance;
+  
+        return subastaFactoryInstance.getIdSubastasDisponibles();
+      }).then(function(subastas) {
+        console.log(subastas);
+        
+        $(".lista-subastas-en-curso").empty();
+        for (i = 0; i < subastas.length; i++) {
+          App.loadSubastaEnCurso(subastas[i]);
+        }
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
 
   handleComenzarSubasta: function(event) {
     event.preventDefault();

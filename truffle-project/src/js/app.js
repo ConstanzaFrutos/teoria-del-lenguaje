@@ -82,8 +82,8 @@ App = {
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
     $(document).on('click', '.btn-ver-mis-tokens', App.handleVerCantidadTokens);
     $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
+    
     $(document).on('click', '.btn-comenzar-subasta', App.handleComenzarSubasta);
-
     $(document).on('click', '.btn-cancelar-subasta', App.handleCancelarSubasta);
     $(document).on('click', '.btn-ofertar-subasta', App.handleOfertarSubasta);
     $(document).on('click', '.btn-retirar-subasta', App.handleRetirarOfertaEnSubasta);
@@ -273,25 +273,21 @@ App = {
       var tiempoInicial = data[2].value;
       var tiempoFinal = data[3].value;
 
-      App.contracts.SubastaFactory.deployed().then(function(instance) {
-        subastaFactoryInstance = instance;
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaItemInstance = instance;
 
-        return subastaFactoryInstance.crearSubasta(account, cartaId, incrementoMinimo, tiempoInicial, tiempoFinal, {from:account});
+        return cartaItemInstance.subastarCarta(account, cartaId, incrementoMinimo, tiempoInicial, tiempoFinal, {from:account});
       }).then(function(result) {
-
         event.preventDefault();
         console.log(result);
         alert(`La subasta ${result} fue creada`);
-
       }).catch(function(err) {
         console.log(err.message);
       });
     });
   },
 
-
   handleCancelarSubasta: function(event) {
-
     event.preventDefault();
 
     var subastaInstance;

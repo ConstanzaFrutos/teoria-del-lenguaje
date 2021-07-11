@@ -1,104 +1,47 @@
 {
-  "contractName": "OzInterface",
+  "contractName": "ISubastaFactory",
   "abi": [
     {
       "inputs": [
         {
           "internalType": "address",
-          "name": "account",
+          "name": "_duenio",
           "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_idCarta",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_incrementoOferta",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tiempoInicial",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_tiempoFinal",
+          "type": "uint256"
         }
       ],
-      "name": "balanceOf",
+      "name": "crearSubasta",
       "outputs": [
         {
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "recipient",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "transfer",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "spender",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "approve",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "sender",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "recipient",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "transferFrom",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
         }
       ],
       "stateMutability": "nonpayable",
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"spender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"approve\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"balanceOf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transfer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"recipient\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"transferFrom\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/CartaItem.sol\":\"OzInterface\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/CartaFactory.sol\":{\"keccak256\":\"0xcb3bfb5915d96771e45cf79e82a1001b0f1232e3f71332c137c7c3f10057305c\",\"urls\":[\"bzz-raw://990048edaa37c6cad5764e4195168166592d9ee4d52a96ac5dc1ec885fa3aeed\",\"dweb:/ipfs/QmWb8D6DdWUkguaErV6UVGrqh1rQXswZhPheaKfQ3m5GEy\"]},\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/CartaHelper.sol\":{\"keccak256\":\"0x2d09ddb9870156894699f2ad5a5d323f04a22e5ff59be791e0a01b0330f95029\",\"urls\":[\"bzz-raw://59cb63b8806fe00d0f6fca6515c2e9169b82901a476838291b29672f3c66702d\",\"dweb:/ipfs/QmU52bxfX2yPVQUTmXgn21bJXW7j5dvdajmrt8WXn5MiMF\"]},\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/CartaItem.sol\":{\"keccak256\":\"0x3562748aedb99c25d4fe02783c9b1910dc5dfd095f421068701ad63f02f545fe\",\"urls\":[\"bzz-raw://97aedfbca24a99cc6910cd82a53f74e0c796c94977867a14c07d413b08e9f813\",\"dweb:/ipfs/Qma5ceRaq62yMRwqCMwJS8fn6XFwvoUjQmNDKjdLxKMQkC\"]},\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/erc721.sol\":{\"keccak256\":\"0x0571f805d47650a1ca3c0ebe43e425a9cd72455e86a0e33134b92c92f23d0b96\",\"urls\":[\"bzz-raw://30d22caff7c745306b131466c5d648509499ba29859dfbb48421fda91dc6871a\",\"dweb:/ipfs/QmYxeFia6enpkdv1hjdq5iTLSzqt3YifrtcG42cp2AFafW\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x1cae4f85f114ff17b90414f5da67365b1d00337abb5bce9bf944eb78a2c0673c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d5ff16b336ce8f906478d5f2eecc6435e00833bdc0b92f6b209cf9e92cb5b2b7\",\"dweb:/ipfs/QmRD1rAZEqQ73C33cdA3QoUyBDMEWnNKNMc6PNkAZWHeQQ\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xf930d2df426bfcfc1f7415be724f04081c96f4fb9ec8d0e3a521c07692dface0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fc2bfdea0d2562c76fb3c4cf70a86c6ba25c5a30e8f8515c95aafdf8383f8395\",\"dweb:/ipfs/QmTbFya18786ckJfLYUoWau9jBTKfmWnWm5XSViWvB7PXN\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_duenio\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_idCarta\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_incrementoOferta\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_tiempoInicial\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_tiempoFinal\",\"type\":\"uint256\"}],\"name\":\"crearSubasta\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/CartaItem.sol\":\"ISubastaFactory\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/CartaFactory.sol\":{\"keccak256\":\"0xcb3bfb5915d96771e45cf79e82a1001b0f1232e3f71332c137c7c3f10057305c\",\"urls\":[\"bzz-raw://990048edaa37c6cad5764e4195168166592d9ee4d52a96ac5dc1ec885fa3aeed\",\"dweb:/ipfs/QmWb8D6DdWUkguaErV6UVGrqh1rQXswZhPheaKfQ3m5GEy\"]},\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/CartaHelper.sol\":{\"keccak256\":\"0x2d09ddb9870156894699f2ad5a5d323f04a22e5ff59be791e0a01b0330f95029\",\"urls\":[\"bzz-raw://59cb63b8806fe00d0f6fca6515c2e9169b82901a476838291b29672f3c66702d\",\"dweb:/ipfs/QmU52bxfX2yPVQUTmXgn21bJXW7j5dvdajmrt8WXn5MiMF\"]},\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/CartaItem.sol\":{\"keccak256\":\"0x3562748aedb99c25d4fe02783c9b1910dc5dfd095f421068701ad63f02f545fe\",\"urls\":[\"bzz-raw://97aedfbca24a99cc6910cd82a53f74e0c796c94977867a14c07d413b08e9f813\",\"dweb:/ipfs/Qma5ceRaq62yMRwqCMwJS8fn6XFwvoUjQmNDKjdLxKMQkC\"]},\"/home/miki_mustard/Desktop/Personal/Facultad/tdl/nuevo-tdl/teoria-del-lenguaje/truffle-project/contracts/erc721.sol\":{\"keccak256\":\"0x0571f805d47650a1ca3c0ebe43e425a9cd72455e86a0e33134b92c92f23d0b96\",\"urls\":[\"bzz-raw://30d22caff7c745306b131466c5d648509499ba29859dfbb48421fda91dc6871a\",\"dweb:/ipfs/QmYxeFia6enpkdv1hjdq5iTLSzqt3YifrtcG42cp2AFafW\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x1cae4f85f114ff17b90414f5da67365b1d00337abb5bce9bf944eb78a2c0673c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d5ff16b336ce8f906478d5f2eecc6435e00833bdc0b92f6b209cf9e92cb5b2b7\",\"dweb:/ipfs/QmRD1rAZEqQ73C33cdA3QoUyBDMEWnNKNMc6PNkAZWHeQQ\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xf930d2df426bfcfc1f7415be724f04081c96f4fb9ec8d0e3a521c07692dface0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fc2bfdea0d2562c76fb3c4cf70a86c6ba25c5a30e8f8515c95aafdf8383f8395\",\"dweb:/ipfs/QmTbFya18786ckJfLYUoWau9jBTKfmWnWm5XSViWvB7PXN\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -11828,7 +11771,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-11T17:35:54.210Z",
+  "updatedAt": "2021-07-11T17:35:54.187Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

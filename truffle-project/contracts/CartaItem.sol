@@ -10,6 +10,10 @@ interface OzInterface {
     function transferFrom(address sender, address recipient, uint amount) external returns (bool);
 }
 
+interface ISubastaFactory {
+    function crearSubasta(address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) external returns(uint);
+}
+
 /**
  * @title CartaItem
  * @dev Funciones de administracion de cartas como 
@@ -19,9 +23,13 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
     address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
     OzInterface ozContract = OzInterface(ozAddress);
 
+    address subastaFactoryAddress;
+    ISubastaFactory subastaFactory = ISubastaFactory(subastaFactoryAddress);
+
     uint costoCarta = 5;
     uint costoTransferencia = 3;
     uint comisionTransferencia = 1;
+    uint costoSubastarCarta = 3;
     address ozAccount = 0x1C53954455A6796723B52021c034964DD9E329dE;
 
     mapping (uint => address) cartaApprovals;
@@ -41,6 +49,19 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
         _crearCarta(descripcionAleatoria, tipoAleatorio);
         emit Transfer(address(0), msg.sender, 1);
         return cartas.length - 1;
+    }
+
+    /**
+     * @dev Se subasta una carta
+     * @return id de la subasta
+     */
+    function subastarCarta(address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public soloDuenioDe(_idCarta) returns (uint) {
+        require(_idCarta < cartas.length, "Error: la carta no existe");
+        require(msg.sender != address(0), "Error: direccion cero subastando carta");
+        require(ozContract.balanceOf(msg.sender) >= costoSubastarCarta, "No tiene saldo suficiente para subastar la carta");
+        uint idSubasta = subastaFactory.crearSubasta(_duenio, _idCarta, _incrementoOferta, _tiempoInicial, _tiempoFinal);
+        ozContract.transferFrom(msg.sender, ozAccount, costoSubastarCarta);
+        return idSubasta;
     }
 
     function balanceOf(address _owner) public view override returns (uint256 _balance) {
@@ -100,5 +121,13 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
      */
     function setOzAccountAddress(address _ozAccountAddress) public onlyOwner {
         ozAccount = _ozAccountAddress;
+    }
+
+    /**
+     * @dev Para cambiar la direccion del contrato de subasta factory
+     */
+    function setSubastaFactoryAddress(address _subastaFactoryAddress) public onlyOwner {
+        subastaFactoryAddress = _subastaFactoryAddress;
+        subastaFactory = ISubastaFactory(subastaFactoryAddress);
     }
 }

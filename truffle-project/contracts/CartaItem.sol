@@ -55,12 +55,14 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
      * @dev Se subasta una carta
      * @return id de la subasta
      */
-    function subastarCarta(address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public soloDuenioDe(_idCarta) returns (uint) {
-        require(_idCarta < cartas.length, "Error: la carta no existe");
+    function subastarCarta(address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public 
+    soloDuenioDe(_idCarta) cartaNoEnSubasta(_idCarta) cartaExiste(_idCarta) returns (uint) {
         require(msg.sender != address(0), "Error: direccion cero subastando carta");
         require(ozContract.balanceOf(msg.sender) >= costoSubastarCarta, "No tiene saldo suficiente para subastar la carta");
         uint idSubasta = subastaFactory.crearSubasta(_duenio, _idCarta, _incrementoOferta, _tiempoInicial, _tiempoFinal);
         ozContract.transferFrom(msg.sender, ozAccount, costoSubastarCarta);
+        Carta storage carta = cartas[_idCarta];
+        carta.enSubasta = true;
         return idSubasta;
     }
 

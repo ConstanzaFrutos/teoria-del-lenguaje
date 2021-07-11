@@ -317,7 +317,7 @@ App = {
     event.preventDefault();
 
     var data = $("#form-subasta :input").serializeArray();
-    var subastaFactoryInstance;
+    var cartaItemInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -336,10 +336,9 @@ App = {
         return cartaItemInstance.subastarCarta(account, cartaId, incrementoMinimo, tiempoInicial, tiempoFinal, {from:account});
       }).then(function(result) {
         event.preventDefault();
-        console.log(result);
         alert(`La subasta ${result} fue creada`);
       }).catch(function(err) {
-        console.log(err.message);
+        alert(err.message);
       });
     });
   },

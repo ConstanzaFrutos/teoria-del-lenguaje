@@ -26,6 +26,7 @@ contract CartaFactory is Ownable {
     struct Carta {
         uint256 descripcion;
         uint8 tipo;
+        bool enSubasta;
     }
     
     Carta[] public cartas;
@@ -38,7 +39,7 @@ contract CartaFactory is Ownable {
      * @param _descripcion descripcion para crear la carta
      */
     function _crearCarta(uint256 _descripcion, uint8 _tipo) internal {
-        cartas.push(Carta(_descripcion, _tipo));
+        cartas.push(Carta(_descripcion, _tipo, false));
         uint id = cartas.length - 1;
         cartaAPersona[id] = msg.sender;
         personaCantidadCartas[msg.sender] ++;
@@ -67,6 +68,16 @@ contract CartaFactory is Ownable {
 
     modifier soloDuenioDe(uint _cartaId) {
         require (msg.sender == cartaAPersona[_cartaId], "Solo el duenio de la carta puede realizar esta transaccion");
+        _;
+    }
+
+    modifier cartaNoEnSubasta(uint _cartaId) {
+        require (!cartas[_cartaId].enSubasta, "La carta esta siendo subastada");
+        _;
+    }
+
+    modifier cartaExiste(uint _cartaId) {
+        require (_cartaId < cartas.length, "La carta no existe");
         _;
     }
 

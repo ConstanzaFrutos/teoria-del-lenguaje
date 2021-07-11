@@ -144,25 +144,35 @@
   </div>
 
   <div class="subasta-en-curso" hidden>
-    <form class="form-subasta-en-curso" id="form-subasta-en-curso">
-      <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
-        <p class="subasta-en-curso-duenio"></p>
-        <p class="subasta-en-curso-id-carta"></p>
-        <p class="subasta-en-curso-tiempo-inicial"></p>
-        <p class="subasta-en-curso-tiempo-final"></p>
-        <p class="subasta-en-curso-incremento-minimo"></p>
-        <br>
-        <label for="cantidad-a-ofertar">Cantidad a ofertar: </label>
-        <input type="number" class="cantidad-a-ofertar" id="cantidad-a-ofertar" name="cantidad-a-ofertar">
-        <button class="btn btn-default btn-ofertar-subasta" type="button">Ofertar</button>
+    <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
+      <p class="subasta-en-curso-duenio"></p>
+      <p class="subasta-en-curso-id-carta"></p>
+      <p class="subasta-en-curso-tiempo-inicial"></p>
+      <p class="subasta-en-curso-tiempo-final"></p>
+      <p class="subasta-en-curso-incremento-minimo"></p>
+      <div class="row">
+        <div class="col-xs-4"><button class="btn btn-default btn-cancelar-subasta" type="button">Cancelar Subasta</button></div>
+        <div class="col-xs-4"><button class="btn btn-default btn-retirar-subasta" type="button">Retirar Fondos</button></div>
       </div>
-    </form>
+    </div>
   </div>
 
-  <div class="row">
-    <div class="col-xs-4"><button class="btn btn-default btn-cancelar-subasta" type="button">Cancelar Subasta</button></div>
-    <div class="col-xs-4"><button class="btn btn-default btn-ofertar-subasta" type="button">Ofertar</button></div>
-    <div class="col-xs-4"><button class="btn btn-default btn-retirar-subasta" type="button">Retirar Oferta</button></div>
+  <div>
+    <form class="form-ofertar" id="form-ofertar">
+      <div class="row">
+        <div class="col-xs-4">
+          <label for="id-subasta-oferta">Id Subasta: </label>
+          <input type="text" class="id-subasta-oferta" id="id-subasta-oferta" name="id-subasta-oferta">
+        </div>
+        <div class="col-xs-4">
+          <label for="ofertar">Cantidad a ofertar: </label>
+          <input type="text" class="ofertar" id="ofertar" name="ofertar">
+        </div>
+        <div class="col-xs-4">
+          <button class="btn btn-default btn-ofertar" type="submit">Ofertar</button>
+        </div>
+      </div>
+    </form>
   </div>
 
 </div>

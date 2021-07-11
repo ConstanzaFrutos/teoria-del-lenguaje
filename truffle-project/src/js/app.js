@@ -261,6 +261,7 @@ App = {
   loadSubastaEnCurso: function (subasta) {
     let template = $(".subasta-en-curso").clone();
     template.removeClass('subasta-en-curso');
+    template.removeAttr('hidden');
     template.addClass('subasta-en-curso-clone');
     template.find("p.subasta-en-curso-id").html("Id de la subasta: " + subasta);
     template.appendTo(".lista-subastas-en-curso");

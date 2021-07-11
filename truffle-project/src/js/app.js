@@ -268,6 +268,8 @@ App = {
     template.find("p.subasta-en-curso-tiempo-inicial").html("Tiempo inicial: " + tiempoInicial);
     template.find("p.subasta-en-curso-tiempo-final").html("Tiempo final: " + tiempoFinal);
     template.find("p.subasta-en-curso-incremento-minimo").html("Incremento mínimo: " + incrementoMinimo);
+    template.find("p.button-cancelar").html('<button class="btn btn-default btn-cancelar-subasta" type="button" data-id="' + idCarta + '">Cancelar Subasta</button>');
+    template.find("p.button-retirar-fondos").html('<button class="btn btn-default btn-retirar-subasta" type="button" data-id="' + idCarta + '">Retirar Fondos</button>');
     template.appendTo(".lista-subastas-en-curso");
   },
 
@@ -347,14 +349,15 @@ App = {
     event.preventDefault();
 
     var subastaInstance;
+    let idSubasta = $(this).attr("data-id");
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
       }
+      
       var account = accounts[0];
-
-
+    
       App.contracts.SubastaFactory.deployed().then(function(instance) {
         subastaFactoryInstance = instance;
 
@@ -371,7 +374,6 @@ App = {
   },
 
   handleOfertarSubasta: function(event) {
-
     event.preventDefault();
 
     var subastaInstance;
@@ -380,7 +382,11 @@ App = {
       if (error) {
         console.log(error);
       }
+
       var account = accounts[0];
+
+      let montoAOfertar = document.getElementById("cantidad-a-ofertar").value;
+      console.log(montoAOfertar);
 
       App.contracts.Subasta.deployed().then(function(instance) {
         subastaInstance = instance;

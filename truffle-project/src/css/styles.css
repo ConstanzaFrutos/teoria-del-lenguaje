@@ -19,3 +19,7 @@ body{
 select {
     width: 30%;
 }
+
+.texto-rojo{
+    color: red;
+}

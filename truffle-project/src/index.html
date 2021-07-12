@@ -138,18 +138,20 @@
 <div id="subasta-view" class="container view-container">
   <h1 class="text-center">Subastas</h1>
 
-  <button class="btn btn-default btn-obtener-subastas-en-curso" type="button">Ver subastas en curso</button>
+  <button class="btn btn-default btn-obtener-subastas-en-curso" type="button">Ver subastas</button>
 
   <div class="lista-subastas-en-curso">
   </div>
 
   <div class="subasta-en-curso" hidden>
     <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
+      <p class="subasta-estado-cancelado"></p>
       <p class="subasta-en-curso-duenio"></p>
       <p class="subasta-en-curso-id-carta"></p>
       <p class="subasta-en-curso-tiempo-inicial"></p>
       <p class="subasta-en-curso-tiempo-final"></p>
       <p class="subasta-en-curso-incremento-minimo"></p>
+      <p class="subasta-en-curso-id-subasta"></p>
       <div class="row">
         <div class="col-xs-4"><p class="button-cancelar"></p></div>
         <div class="col-xs-4"><p class="button-retirar-fondos"></p></div>
@@ -165,11 +167,11 @@
           <input type="text" class="id-subasta-oferta" id="id-subasta-oferta" name="id-subasta-oferta">
         </div>
         <div class="col-xs-4">
-          <label for="ofertar">Cantidad a ofertar: </label>
-          <input type="text" class="ofertar" id="ofertar" name="ofertar">
+          <label for="cantidad-a-ofertar">Cantidad a ofertar: </label>
+          <input type="text" class="ofertar" id="cantidad-a-ofertar" name="cantidad-a-ofertar">
         </div>
         <div class="col-xs-4">
-          <button class="btn btn-default btn-ofertar" type="submit">Ofertar</button>
+          <button class="btn btn-default btn-ofertar-subasta" type="submit">Ofertar</button>
         </div>
       </div>
     </form>

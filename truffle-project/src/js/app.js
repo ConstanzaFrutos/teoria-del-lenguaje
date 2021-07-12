@@ -97,7 +97,6 @@ App = {
       if (error) {
         console.log(error);
       }
-
       var account = accounts[0];
       console.log(`Obteniendo balance de ${account}`);
 
@@ -258,17 +257,23 @@ App = {
 
   // Subasta
 
-  loadSubastaEnCurso: function (duenio, idCarta, tiempoInicial, tiempoFinal, incrementoMinimo) {
+  loadSubastaEnCurso: function (duenio, idCarta, tiempoInicial, tiempoFinal, incrementoMinimo,estado, idSubasta) {
     let template = $(".subasta-en-curso").clone();
     template.removeClass('subasta-en-curso');
     template.removeAttr('hidden');
     template.addClass('subasta-en-curso-clone');
+
     template.find("p.subasta-en-curso-duenio").html("Dueño de la subasta: " + duenio);
     template.find("p.subasta-en-curso-id-carta").html("Id de la carta: " + idCarta);
     template.find("p.subasta-en-curso-tiempo-inicial").html("Tiempo inicial: " + tiempoInicial);
     template.find("p.subasta-en-curso-tiempo-final").html("Tiempo final: " + tiempoFinal);
     template.find("p.subasta-en-curso-incremento-minimo").html("Incremento mínimo: " + incrementoMinimo);
-    template.find("p.button-cancelar").html('<button class="btn btn-default btn-cancelar-subasta" type="button" data-id="' + idCarta + '">Cancelar Subasta</button>');
+    template.find("p.subasta-en-curso-id-subasta").html("Id de la subasta : " + idSubasta);
+    if (!estado ){
+      template.find("p.button-cancelar").html('<button class="btn btn-default btn-cancelar-subasta" type="button" data-id="' + idCarta + '">Cancelar Subasta</button>');
+    }else{
+      template.find("p.subasta-estado-cancelado").html('<p class="texto-rojo" > Esta subasta esta cancelada </p>');
+    }
     template.find("p.button-retirar-fondos").html('<button class="btn btn-default btn-retirar-subasta" type="button" data-id="' + idCarta + '">Retirar Fondos</button>');
     template.appendTo(".lista-subastas-en-curso");
   },
@@ -304,7 +309,9 @@ App = {
             let tiempoInicial = subasta[2] * 1;
             let tiempoFinal = subasta[3] * 1;
             let incrementoMinimo = subasta[4] * 1;
-            App.loadSubastaEnCurso(duenio, cartaId, tiempoInicial, tiempoFinal, incrementoMinimo);
+            let estado = subasta[5];
+            let idSubasta = subasta[9] * 1;
+            App.loadSubastaEnCurso(duenio, cartaId, tiempoInicial, tiempoFinal, incrementoMinimo, estado , idSubasta);
           });
         }).catch(function(err) {
           console.log(err.message);
@@ -348,8 +355,9 @@ App = {
   handleCancelarSubasta: function(event) {
     event.preventDefault();
 
-    var subastaInstance;
+    var subastaFactoryInstance;
     let idSubasta = $(this).attr("data-id");
+    console.log(idSubasta)
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -361,8 +369,9 @@ App = {
       App.contracts.SubastaFactory.deployed().then(function(instance) {
         subastaFactoryInstance = instance;
 
-        return subastaInstance.cancelarSubasta( {from: account});
+        return subastaFactoryInstance.cancelarSubasta(idSubasta, {from: account});
       }).then(function(result) {
+
         alert(`Subasta cancelada`);
         location.reload();
         return;
@@ -376,7 +385,7 @@ App = {
   handleOfertarSubasta: function(event) {
     event.preventDefault();
 
-    var subastaInstance;
+    var subastaFactoryInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -384,19 +393,19 @@ App = {
       }
 
       var account = accounts[0];
-
+      let idSubasta = document.getElementById("id-subasta-oferta").value;
       let montoAOfertar = document.getElementById("cantidad-a-ofertar").value;
       console.log(montoAOfertar);
 
-      App.contracts.Subasta.deployed().then(function(instance) {
-        subastaInstance = instance;
-        if (subastaInstance.estaCancelada() != False){
+      App.contracts.SubastaFactory.deployed().then(function(instance) {
+        subastaFactoryInstance = instance;
+        if (subastaFactoryInstance.estaCancelada() != False){
           alert(`La subasta ha finalizado o esta cancelada`);
           return;
         }
-        return subastaInstance.ofertar( {from: account, payable});
+        return subastaFactoryInstance.ofertar(idSubasta ,{from: account, value: montoAOfertar});
       }).then(function(result) {
-        location.reload();
+        alert(`usted oferto  ${montoAOfertar} para la subasta ${idSubasta}`);
         return;
       }).catch(function(err) {
         console.log(err.message);

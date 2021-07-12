@@ -1,6 +1,9 @@
 pragma solidity ^0.8.0;
 
-contract SubastaFactory{
+
+contract SubastaFactory {
+
+
     uint public idSubasta;
     Subasta[] public subastas;
     
@@ -19,6 +22,7 @@ contract SubastaFactory{
 
         uint  maximaOfertaLicitador; //esta es complicada, ejemplo:500 pesos.
         bool duenioRetiroDinero; //estado del duenio: si retiro el dinero ganado o no.
+        uint idSubasta; // identificador de la subasta
 
         mapping(address => uint256)  ofertasLicitadores; //Hash-> licitadores-ofertas
     }
@@ -31,14 +35,14 @@ contract SubastaFactory{
         require (_tiempoInicial <= _tiempoFinal, "El tiempo inicial deberia ser menor al tiempo final") ;
         require (_tiempoInicial <= block.number);
         require (_duenio != address(0), "Se necesita una cuenta para iniciar una subasta.");
-
         subastas.push();
-        modificarSubasta( _duenio,  _idCarta,  _incrementoOferta,  _tiempoInicial,  _tiempoFinal);
+        uint _idSubasta = idSubasta;
+        modificarSubasta( _duenio,  _idCarta,  _incrementoOferta,  _tiempoInicial,  _tiempoFinal, _idSubasta);
         idSubasta ++;
-        return idSubasta;
+        return _idSubasta;
     }
 
-    function modificarSubasta (address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public{
+    function modificarSubasta (address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal, uint _idSubasta) public{
         Subasta storage subasta = subastas[idSubasta];
         subasta.duenio = _duenio;
         subasta.idCarta = _idCarta;
@@ -49,6 +53,7 @@ contract SubastaFactory{
         //subasta.mejorLicitador = address(0);
         subasta.maximaOfertaLicitador = 0;
         subasta.duenioRetiroDinero = false;
+        subasta.idSubasta = idSubasta ;
     }
 
     function getIdSubastasDisponibles() view public returns(uint[] memory){
@@ -78,15 +83,15 @@ contract SubastaFactory{
     }
 
 
-    function ofertar(uint _idSubasta) public payable soloDespuesDelComienzo(_idSubasta) soloAntesDelFin(_idSubasta) soloSiNoFueCancelada(_idSubasta)
+    function ofertar(uint _idSubasta, uint _amount ) public payable soloDespuesDelComienzo(_idSubasta) soloAntesDelFin(_idSubasta) soloSiNoFueCancelada(_idSubasta)
         soloSiNoEsduenio(_idSubasta) returns (bool success){
 
         Subasta storage subasta = subastas[_idSubasta];
 
-        require(msg.value == 0, "Se debe ofertar una cantidad positiva");
+        require(_amount == 0, "Se debe ofertar una cantidad positiva");
 
-        //Cuando oferta de vuelta solo envia la diferencia entre lo que quiere ofertar y lo que oferto previamente. 
-        uint totalNuevaOferta = subasta.ofertasLicitadores[msg.sender] + msg.value;
+
+        uint totalNuevaOferta = subasta.ofertasLicitadores[msg.sender] + _amount;
 
         //Si la oferta entrante no supera la maxima oferta de otro licitador, rechazamos la oferta. 
         require (totalNuevaOferta <= subasta.maximaOfertaLicitador, "Su oferta debe superar la maxima actual");
@@ -140,7 +145,6 @@ contract SubastaFactory{
         return true;
     }
 
-
     function cancelarSubasta(uint _idSubasta) public soloSiEsduenio(_idSubasta) soloAntesDelFin(_idSubasta) soloSiNoFueCancelada(_idSubasta)
     returns (bool success){
         Subasta storage subasta = subastas[_idSubasta];
@@ -154,15 +158,16 @@ contract SubastaFactory{
         return b;
     }
 
+
     modifier soloSiEsduenio(uint _idSubasta){
         Subasta storage subasta = subastas[_idSubasta];
-        require (msg.sender != subasta.duenio, "Solo el duenio puede realizar esta accion.");
+        require (msg.sender == subasta.duenio, "Solo el duenio puede realizar esta accion.");
         _;
     }
 
     modifier soloSiNoEsduenio(uint _idSubasta){
         Subasta storage subasta = subastas[_idSubasta];
-        require (msg.sender == subasta.duenio, "El duenio de la subasta no puede realizar esta accion.");
+        require (msg.sender != subasta.duenio, "El duenio de la subasta no puede realizar esta accion.");
         _;
     }
 
@@ -180,15 +185,17 @@ contract SubastaFactory{
 
     modifier soloSiNoFueCancelada(uint _idSubasta){
         Subasta storage subasta = subastas[_idSubasta];
-        require (subasta.cancelada, "Esta accion no puede realizarse una vez cancelada la subasta.");
+        require (!subasta.cancelada , "Esta accion no puede realizarse una vez cancelada la subasta.");
         _;
     }
+
 
     modifier soloSiTerminoOCancelada(uint _idSubasta){
         Subasta storage subasta = subastas[_idSubasta];
         require (block.number < subasta.tiempoFinal && !subasta.cancelada, "Esta accion no puede realizarse si la subasta esta en curso");
         _;
     }
+
     
  }
 

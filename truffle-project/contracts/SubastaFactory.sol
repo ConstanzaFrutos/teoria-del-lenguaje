@@ -87,7 +87,6 @@ contract SubastaFactory {
 
         require(_amount == 0, "Se debe ofertar una cantidad positiva");
 
-
         uint totalNuevaOferta = subasta.ofertasLicitadores[msg.sender] + _amount;
 
         //Si la oferta entrante no supera la maxima oferta de otro licitador, rechazamos la oferta. 
@@ -98,9 +97,9 @@ contract SubastaFactory {
 
         uint ofertaMaxima = subasta.ofertasLicitadores[subasta.mejorLicitador];
 
-        if(totalNuevaOferta <= ofertaMaxima){
+        if (totalNuevaOferta <= ofertaMaxima) {
             subasta.maximaOfertaLicitador = _calcularMinimo(totalNuevaOferta + subasta.incrementoOferta, ofertaMaxima);
-        }else{
+        } else {
             if(msg.sender != subasta.mejorLicitador){
                 subasta.mejorLicitador = msg.sender;
                 subasta.maximaOfertaLicitador = _calcularMinimo(totalNuevaOferta, ofertaMaxima + subasta.incrementoOferta);

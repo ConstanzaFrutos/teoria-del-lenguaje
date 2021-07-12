@@ -51,6 +51,8 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
         return cartas.length - 1;
     }
 
+    // Funciones subasta
+
     /**
      * @dev Se subasta una carta
      * @return id de la subasta
@@ -65,6 +67,8 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
         carta.enSubasta = true;
         return idSubasta;
     }
+
+    // Implementacion ERC721
 
     function balanceOf(address _owner) public view override returns (uint256 _balance) {
         return personaCantidadCartas[_owner];
@@ -106,9 +110,13 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
         _transfer(owner, msg.sender, _tokenId);
     }
 
+    // Funciones OzToken
+
     function balanceOzToken() external view returns (uint) {
         return ozContract.balanceOf(msg.sender);
     }
+
+    // Uso de contratos externos
 
     /**
      * @dev Para cambiar la direccion del contrato OzToken
@@ -119,17 +127,19 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
     }
 
     /**
-     * @dev Se setea la cuenta a la cual se le va a depositar el pago     
-     */
-    function setOzAccountAddress(address _ozAccountAddress) public onlyOwner {
-        ozAccount = _ozAccountAddress;
-    }
-
-    /**
      * @dev Para cambiar la direccion del contrato de subasta factory
      */
     function setSubastaFactoryAddress(address _subastaFactoryAddress) public onlyOwner {
         subastaFactoryAddress = _subastaFactoryAddress;
         subastaFactory = ISubastaFactory(subastaFactoryAddress);
+    }
+
+    // Cuenta de destino de fondos
+
+    /**
+     * @dev Se setea la cuenta a la cual se le va a depositar el pago     
+     */
+    function setOzAccountAddress(address _ozAccountAddress) public onlyOwner {
+        ozAccount = _ozAccountAddress;
     }
 }

@@ -257,24 +257,25 @@ App = {
 
   // Subasta
 
-  loadSubastaEnCurso: function (duenio, idCarta, tiempoInicial, tiempoFinal, incrementoMinimo,estado, idSubasta) {
+  loadSubastaEnCurso: function (subastaId, duenio, cartaId, tiempoInicial, tiempoFinal, incrementoMinimo, cancelada) {
     let template = $(".subasta-en-curso").clone();
     template.removeClass('subasta-en-curso');
     template.removeAttr('hidden');
     template.addClass('subasta-en-curso-clone');
 
+    template.find("p.subasta-en-curso-id-subasta").html("Id de la subasta : " + subastaId);
     template.find("p.subasta-en-curso-duenio").html("Dueño de la subasta: " + duenio);
-    template.find("p.subasta-en-curso-id-carta").html("Id de la carta: " + idCarta);
+    template.find("p.subasta-en-curso-id-carta").html("Id de la carta: " + cartaId);
     template.find("p.subasta-en-curso-tiempo-inicial").html("Tiempo inicial: " + tiempoInicial);
     template.find("p.subasta-en-curso-tiempo-final").html("Tiempo final: " + tiempoFinal);
     template.find("p.subasta-en-curso-incremento-minimo").html("Incremento mínimo: " + incrementoMinimo);
-    template.find("p.subasta-en-curso-id-subasta").html("Id de la subasta : " + idSubasta);
-    if (!estado ){
-      template.find("p.button-cancelar").html('<button class="btn btn-default btn-cancelar-subasta" type="button" data-id="' + idCarta + '">Cancelar Subasta</button>');
+    
+    if (!cancelada){
+      template.find("p.button-cancelar").html('<button class="btn btn-default btn-cancelar-subasta" type="button" data-id="' + subastaId + '">Cancelar Subasta</button>');
     }else{
       template.find("p.subasta-estado-cancelado").html('<p class="texto-rojo" > Esta subasta esta cancelada </p>');
     }
-    template.find("p.button-retirar-fondos").html('<button class="btn btn-default btn-retirar-subasta" type="button" data-id="' + idCarta + '">Retirar Fondos</button>');
+    template.find("p.button-retirar-fondos").html('<button class="btn btn-default btn-retirar-subasta" type="button" data-id="' + subastaId + '">Retirar Fondos</button>');
     template.appendTo(".lista-subastas-en-curso");
   },
 
@@ -304,14 +305,15 @@ App = {
       
         Promise.all(subastasPromise).then(subastas => {
           subastas.forEach(subasta => {
-            let duenio = subasta[0];
-            let cartaId = subasta[1] * 1;
-            let tiempoInicial = subasta[2] * 1;
-            let tiempoFinal = subasta[3] * 1;
-            let incrementoMinimo = subasta[4] * 1;
-            let estado = subasta[5];
-            let idSubasta = subasta[9] * 1;
-            App.loadSubastaEnCurso(duenio, cartaId, tiempoInicial, tiempoFinal, incrementoMinimo, estado , idSubasta);
+            let subastaId = subasta[0] * 1;
+            let duenio = subasta[1];
+            let cartaId = subasta[2] * 1;
+            let tiempoInicial = subasta[3] * 1;
+            let tiempoFinal = subasta[4] * 1;
+            let incrementoMinimo = subasta[5] * 1;
+            let cancelada = subasta[6];
+
+            App.loadSubastaEnCurso(subastaId, duenio, cartaId, tiempoInicial, tiempoFinal, incrementoMinimo, cancelada);
           });
         }).catch(function(err) {
           console.log(err.message);
@@ -357,7 +359,7 @@ App = {
 
     var subastaFactoryInstance;
     let idSubasta = $(this).attr("data-id");
-    console.log(idSubasta)
+    alert(`Cancelando la subasta ${idSubasta}`);
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -371,7 +373,6 @@ App = {
 
         return subastaFactoryInstance.cancelarSubasta(idSubasta, {from: account});
       }).then(function(result) {
-
         alert(`Subasta cancelada`);
         location.reload();
         return;

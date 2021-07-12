@@ -12,6 +12,7 @@ contract SubastaFactory {
     }
 
     struct Subasta{
+        uint id; // identificador de la subasta
         address duenio; // duenio del objeto a subastar
         uint idCarta; // id carta a ofertar
         uint tiempoInicial; //tiempo de comienzo de la subasta
@@ -22,8 +23,6 @@ contract SubastaFactory {
 
         uint  maximaOfertaLicitador; //esta es complicada, ejemplo:500 pesos.
         bool duenioRetiroDinero; //estado del duenio: si retiro el dinero ganado o no.
-        uint idSubasta; // identificador de la subasta
-
         mapping(address => uint256)  ofertasLicitadores; //Hash-> licitadores-ofertas
     }
 
@@ -36,24 +35,23 @@ contract SubastaFactory {
         require (_tiempoInicial <= block.number);
         require (_duenio != address(0), "Se necesita una cuenta para iniciar una subasta.");
         subastas.push();
-        uint _idSubasta = idSubasta;
-        modificarSubasta( _duenio,  _idCarta,  _incrementoOferta,  _tiempoInicial,  _tiempoFinal, _idSubasta);
+        modificarSubasta(_duenio, _idCarta, _incrementoOferta, _tiempoInicial, _tiempoFinal);
+        uint idNuevaSubasta = idSubasta;
         idSubasta ++;
-        return _idSubasta;
+        return idNuevaSubasta;
     }
 
-    function modificarSubasta (address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal, uint _idSubasta) public{
+    function modificarSubasta (address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public{
         Subasta storage subasta = subastas[idSubasta];
+        subasta.id = idSubasta;
         subasta.duenio = _duenio;
         subasta.idCarta = _idCarta;
         subasta.incrementoOferta = _incrementoOferta;
         subasta.tiempoInicial = _tiempoInicial;
         subasta.tiempoFinal = _tiempoFinal;
         subasta.cancelada = false;
-        //subasta.mejorLicitador = address(0);
         subasta.maximaOfertaLicitador = 0;
         subasta.duenioRetiroDinero = false;
-        subasta.idSubasta = idSubasta ;
     }
 
     function getIdSubastasDisponibles() view public returns(uint[] memory){
@@ -70,7 +68,6 @@ contract SubastaFactory {
         Subasta storage subasta = subastas[_idSubasta];
         return subasta.maximaOfertaLicitador;
     }
-
 
     function obtenerMejorLicitador(uint _idSubasta) public view returns(address){
         Subasta storage subasta = subastas[_idSubasta];
@@ -173,13 +170,13 @@ contract SubastaFactory {
 
     modifier soloDespuesDelComienzo(uint _idSubasta){
         Subasta storage subasta = subastas[_idSubasta];
-        require (block.number < subasta.tiempoInicial, "Esta accion no puede ser realizada hasta que no inicie la subasta.");
+        require (block.number > subasta.tiempoInicial, "Esta accion no puede ser realizada hasta que no inicie la subasta.");
         _;
     }
 
     modifier soloAntesDelFin(uint _idSubasta){
         Subasta storage subasta = subastas[_idSubasta];
-        require (block.number > subasta.tiempoFinal, "Esta accion solo se puede realizar durante la subasta.");
+        require (block.number < subasta.tiempoFinal, "Esta accion solo se puede realizar durante la subasta.");
         _;
     }
 

@@ -12,6 +12,10 @@ interface OzInterface {
 
 interface ISubastaFactory {
     function crearSubasta(address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) external returns(uint);
+    function cancelarSubasta(uint _idSubasta, address _cuenta ) external returns (bool success);
+    function retirarFondos(uint _idSubasta, address _cuenta ) external returns (uint cantidadARetirar);
+    function ofertar(uint _idSubasta, uint _amount , address _cuenta ) external returns (bool success);
+    function getIdCartaEnSubasta(uint _idSubasta) external returns(uint);
 }
 
 /**
@@ -57,7 +61,7 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
      * @dev Se subasta una carta
      * @return id de la subasta
      */
-    function subastarCarta(address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public 
+    function subastarCarta(address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) public
     soloDuenioDe(_idCarta) cartaNoEnSubasta(_idCarta) cartaExiste(_idCarta) returns (uint) {
         require(msg.sender != address(0), "Error: direccion cero subastando carta");
         require(ozContract.balanceOf(msg.sender) >= costoSubastarCarta, "No tiene saldo suficiente para subastar la carta");
@@ -68,13 +72,35 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
         return idSubasta;
     }
 
+    function ofertarCarta(uint _idSubasta, uint _amount) public returns(bool) {
+        require(_amount == 0, "Se debe ofertar una cantidad positiva");
+        require(ozContract.balanceOf(msg.sender) >= _amount, "No tiene saldo suficiente para ofertar");
+        require( subastaFactory.ofertar(_idSubasta, _amount, msg.sender), "No se pudo ofertar en esta subasta");
+        ozContract.transferFrom(msg.sender, ozAccount, _amount);
+        return true;
+    }
+
+    function retirarFondos(uint _idSubasta) public returns(bool) {
+        uint cantidadARetirar = subastaFactory.retirarFondos(_idSubasta, msg.sender);
+        ozContract.transferFrom(ozAccount,msg.sender, cantidadARetirar);
+        return true;
+    }
+
+    function cancelarSubasta(uint _idSubasta) public returns(bool) {
+        bool cancelarSubasta = subastaFactory.cancelarSubasta(_idSubasta, msg.sender );
+        uint _idCarta = subastaFactory.getIdCartaEnSubasta(_idSubasta);
+        Carta storage carta = cartas[_idCarta];
+        carta.enSubasta = cancelarSubasta;
+        return cancelarSubasta;
+    }
+
     // Implementacion ERC721
 
-    function balanceOf(address _owner) public view override returns (uint256 _balance) {
+    function balanceOf(address _owner) public view override returns(uint256 _balance) {
         return personaCantidadCartas[_owner];
     }
 
-    function ownerOf(uint256 _tokenId) public view override returns (address _owner) {
+    function ownerOf(uint256 _tokenId) public view override returns(address _owner) {
         return cartaAPersona[_tokenId];
     }
 

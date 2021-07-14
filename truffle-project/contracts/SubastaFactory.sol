@@ -64,6 +64,11 @@ contract SubastaFactory {
         return subastasDisponibles;
     }
 
+    function getIdCartaEnSubasta(uint _idSubasta) view public returns(uint){
+
+        return subastas[_idSubasta].idCarta;
+    }
+
     function obtenerOfertaMaxima(uint _idSubasta) public view returns(uint){
         Subasta storage subasta = subastas[_idSubasta];
         return subasta.maximaOfertaLicitador;
@@ -79,21 +84,18 @@ contract SubastaFactory {
         return subasta.cancelada;
     }
 
-
-    function ofertar(uint _idSubasta, uint _amount ) public payable soloDespuesDelComienzo(_idSubasta) soloAntesDelFin(_idSubasta) soloSiNoFueCancelada(_idSubasta)
-        soloSiNoEsduenio(_idSubasta) returns (bool success){
+    function ofertar(uint _idSubasta, uint _amount , address _cuenta) public payable soloDespuesDelComienzo(_idSubasta) soloAntesDelFin(_idSubasta) soloSiNoFueCancelada(_idSubasta)
+        soloSiNoEsduenio(_idSubasta, _cuenta) returns (bool success){
 
         Subasta storage subasta = subastas[_idSubasta];
 
-        require(_amount == 0, "Se debe ofertar una cantidad positiva");
-
-        uint totalNuevaOferta = subasta.ofertasLicitadores[msg.sender] + _amount;
+        uint totalNuevaOferta = subasta.ofertasLicitadores[_cuenta] + _amount;
 
         //Si la oferta entrante no supera la maxima oferta de otro licitador, rechazamos la oferta. 
         require (totalNuevaOferta <= subasta.maximaOfertaLicitador, "Su oferta debe superar la maxima actual");
 
         //Le asigno al licitador su nueva oferta
-        subasta.ofertasLicitadores[msg.sender] = totalNuevaOferta;
+        subasta.ofertasLicitadores[_cuenta] = totalNuevaOferta;
 
         uint ofertaMaxima = subasta.ofertasLicitadores[subasta.mejorLicitador];
 
@@ -101,47 +103,48 @@ contract SubastaFactory {
             subasta.maximaOfertaLicitador = _calcularMinimo(totalNuevaOferta + subasta.incrementoOferta, ofertaMaxima);
         } else {
             if(msg.sender != subasta.mejorLicitador){
-                subasta.mejorLicitador = msg.sender;
+                subasta.mejorLicitador = _cuenta;
                 subasta.maximaOfertaLicitador = _calcularMinimo(totalNuevaOferta, ofertaMaxima + subasta.incrementoOferta);
             }
             ofertaMaxima = totalNuevaOferta;
         }
-        emit RegistrarOferta(msg.sender,totalNuevaOferta, subasta.mejorLicitador);
+       // emit RegistrarOferta(msg.sender,totalNuevaOferta, subasta.mejorLicitador);
         return true;
     }
 
+    function retirarFondos(uint _idSubasta , address _cuenta ) public soloSiTerminoOCancelada(_idSubasta) returns (uint cantidadARetirar){
 
-    function retirarFondos(uint _idSubasta) public soloSiTerminoOCancelada(_idSubasta) returns (bool success){
         address cuentaQueRetira;
         uint cantidadARetirar;
         Subasta storage subasta = subastas[_idSubasta];
+        require ( subasta.cancelada , "No puede retirar sus fondos hasta que no termine la subasta");
         if(subasta.cancelada){ //si la subasta fue cancelada, todos pueden retirar sus ofertas.
-            cuentaQueRetira = msg.sender;
+            cuentaQueRetira = _cuenta;
             cantidadARetirar = subasta.ofertasLicitadores[cuentaQueRetira];
 
         }else{ // La subasta termino correctamente (alguien gano)   
-            if(msg.sender == subasta.duenio){ //el duenio tiene que poder retirar el dinero ganado en la subasta
+            if(_cuenta == subasta.duenio){ //el duenio tiene que poder retirar el dinero ganado en la subasta
                 cuentaQueRetira = subasta.duenio;
                 cantidadARetirar = subasta.maximaOfertaLicitador;
                 subasta.duenioRetiroDinero = true;
-            }else if(msg.sender == subasta.mejorLicitador){ //el ganador de la subasta puede retirar la diferencia entre la oferta ganadora y oferta maxima.
+            }else if(_cuenta == subasta.mejorLicitador){ //el ganador de la subasta puede retirar la diferencia entre la oferta ganadora y oferta maxima.
                 cuentaQueRetira = subasta.mejorLicitador;
                 cantidadARetirar = subasta.ofertasLicitadores[subasta.mejorLicitador] - subasta.maximaOfertaLicitador;
             }else{ // cualquiera que participo y no gano puede retirar su oferta. 
-                cuentaQueRetira = msg.sender;
+                cuentaQueRetira = _cuenta;
                 cantidadARetirar = subasta.ofertasLicitadores[cuentaQueRetira];
             }
         }
         require ( cantidadARetirar == 0, "No hay dinero disponible para retirar");
         subasta.ofertasLicitadores[cuentaQueRetira] -= cantidadARetirar;
 
-        require (!payable(msg.sender).send(cantidadARetirar), "Hubo un error al retirar la oferta."); 
+        //require (!payable(msg.sender).send(cantidadARetirar), "Hubo un error al retirar la oferta.");
 
-        emit RegistrarRetiro(msg.sender, cuentaQueRetira, cantidadARetirar);
-        return true;
+        //emit RegistrarRetiro(msg.sender, cuentaQueRetira, cantidadARetirar);
+        return cantidadARetirar;
     }
 
-    function cancelarSubasta(uint _idSubasta) public soloSiEsduenio(_idSubasta) soloAntesDelFin(_idSubasta) soloSiNoFueCancelada(_idSubasta)
+    function cancelarSubasta(uint _idSubasta , address _cuenta) public soloSiEsduenio(_idSubasta, _cuenta) soloAntesDelFin(_idSubasta) soloSiNoFueCancelada(_idSubasta)
     returns (bool success){
         Subasta storage subasta = subastas[_idSubasta];
         subasta.cancelada = true;
@@ -154,16 +157,15 @@ contract SubastaFactory {
         return b;
     }
 
-
-    modifier soloSiEsduenio(uint _idSubasta){
+    modifier soloSiEsduenio(uint _idSubasta, address _cuenta){
         Subasta storage subasta = subastas[_idSubasta];
-        require (msg.sender == subasta.duenio, "Solo el duenio puede realizar esta accion.");
+        require (_cuenta == subasta.duenio, "Solo el duenio puede realizar esta accion.");
         _;
     }
 
-    modifier soloSiNoEsduenio(uint _idSubasta){
+    modifier soloSiNoEsduenio(uint _idSubasta, address _cuenta){
         Subasta storage subasta = subastas[_idSubasta];
-        require (msg.sender != subasta.duenio, "El duenio de la subasta no puede realizar esta accion.");
+        require ( _cuenta != subasta.duenio, "El duenio de la subasta no puede realizar esta accion.");
         _;
     }
 
@@ -184,7 +186,6 @@ contract SubastaFactory {
         require (!subasta.cancelada , "Esta accion no puede realizarse una vez cancelada la subasta.");
         _;
     }
-
 
     modifier soloSiTerminoOCancelada(uint _idSubasta){
         Subasta storage subasta = subastas[_idSubasta];

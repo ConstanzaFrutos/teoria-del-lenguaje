@@ -14,7 +14,6 @@ contract SubastaFactory {
 
     uint public idSubasta;
     Subasta[] public subastas;
-    IERC20 public ozToken;
     OzInterface public ozContract;
     address owner;
     
@@ -77,9 +76,9 @@ contract SubastaFactory {
         return subastasDisponibles;
     }
 
-    function setTokenAdress(address _token) public payable returns(bool){
+    function setTokenAdress(address _ozAddress) public payable returns(bool){
         require(msg.sender == owner, "Solo el OWNER puede cambiar el Token.");
-        ozToken = IERC20(_token);
+        ozContract = OzInterface(_ozAddress);
         return true;
     }
 
@@ -135,7 +134,7 @@ contract SubastaFactory {
         return true;
     }
 
-    function retirarFondos(uint _idSubasta , address _cuenta ) public soloSiTerminoOCancelada(_idSubasta) returns (uint cantidadARetirar){
+    function retirarFondos(uint _idSubasta , address _cuenta ) public payable soloSiTerminoOCancelada(_idSubasta) returns (uint cantidadARetirar){
 
         address cuentaQueRetira;
         uint cantidadARetirar;

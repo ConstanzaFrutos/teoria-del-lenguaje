@@ -24,9 +24,9 @@ interface ISubastaFactory {
  * compra de las mismas o transferencia de ownership
  */
 contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
-    address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
-    OzInterface ozContract = OzInterface(ozAddress);
-
+    /*address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
+    OzInterface ozContract = OzInterface(ozAddress);*/
+    OzInterface public ozContract;
     address subastaFactoryAddress;
     ISubastaFactory subastaFactory = ISubastaFactory(subastaFactoryAddress);
 
@@ -38,7 +38,9 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
 
     mapping (uint => address) cartaApprovals;
 
-    constructor() public ERC721Metadata("CartaItem", "CITM") {}
+    constructor(address _ozAddress) public ERC721Metadata("CartaItem", "CITM") {
+        ozContract = OzInterface(_ozAddress);
+    }
 
     /**
      * @dev Crea una carta aleatoria
@@ -148,8 +150,7 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
      * @dev Para cambiar la direccion del contrato OzToken
      */
     function setOzTokenAddress(address _ozTokenAddress) public onlyOwner {
-        ozAddress = _ozTokenAddress;
-        ozContract = OzInterface(ozAddress);
+        ozContract = OzInterface(_ozTokenAddress);
     }
 
     /**

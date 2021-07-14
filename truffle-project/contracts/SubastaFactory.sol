@@ -1,14 +1,27 @@
 pragma solidity ^0.8.0;
 
+import "./ozToken.sol";
+
+interface OzInterface {
+    function balanceOf(address account) external view returns (uint);
+    function transfer(address recipient, uint amount) external returns (bool);
+    function approve(address spender, uint amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint amount) external returns (bool);
+}
 
 contract SubastaFactory {
 
 
     uint public idSubasta;
     Subasta[] public subastas;
+    IERC20 public ozToken;
+    OzInterface public ozContract;
+    address owner;
     
-    constructor(){
+    constructor(address _ozAddress){
         idSubasta = 0;
+        ozContract = OzInterface(_ozAddress);
+        owner = msg.sender;
     }
 
     struct Subasta{
@@ -64,6 +77,12 @@ contract SubastaFactory {
         return subastasDisponibles;
     }
 
+    function setTokenAdress(address _token) public payable returns(bool){
+        require(msg.sender == owner, "Solo el OWNER puede cambiar el Token.");
+        ozToken = IERC20(_token);
+        return true;
+    }
+
     function getIdCartaEnSubasta(uint _idSubasta) view public returns(uint){
 
         return subastas[_idSubasta].idCarta;
@@ -88,7 +107,7 @@ contract SubastaFactory {
         soloSiNoEsduenio(_idSubasta, _cuenta) returns (bool success){
 
         Subasta storage subasta = subastas[_idSubasta];
-
+        
         uint totalNuevaOferta = subasta.ofertasLicitadores[_cuenta] + _amount;
 
         //Si la oferta entrante no supera la maxima oferta de otro licitador, rechazamos la oferta. 
@@ -108,7 +127,11 @@ contract SubastaFactory {
             }
             ofertaMaxima = totalNuevaOferta;
         }
-       // emit RegistrarOferta(msg.sender,totalNuevaOferta, subasta.mejorLicitador);
+        uint cantidadOferta = _amount;
+        address cuentaOferta = _cuenta;
+        SubastaFactory.ozContract.transferFrom(cuentaOferta, address(this), cantidadOferta);
+        emit RegistrarOferta(cuentaOferta,totalNuevaOferta, subasta.mejorLicitador);
+
         return true;
     }
 
@@ -139,8 +162,8 @@ contract SubastaFactory {
         subasta.ofertasLicitadores[cuentaQueRetira] -= cantidadARetirar;
 
         //require (!payable(msg.sender).send(cantidadARetirar), "Hubo un error al retirar la oferta.");
-
-        //emit RegistrarRetiro(msg.sender, cuentaQueRetira, cantidadARetirar);
+        SubastaFactory.ozContract.transferFrom(address(this), _cuenta, cantidadARetirar);
+        emit RegistrarRetiro(_cuenta, cuentaQueRetira, cantidadARetirar);
         return cantidadARetirar;
     }
 

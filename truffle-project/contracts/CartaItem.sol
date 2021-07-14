@@ -26,9 +26,9 @@ interface ISubastaFactory {
 contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
     /*address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
     OzInterface ozContract = OzInterface(ozAddress);*/
-    OzInterface public ozContract;
-    address subastaFactoryAddress;
-    ISubastaFactory subastaFactory = ISubastaFactory(subastaFactoryAddress);
+    OzInterface ozContract;
+    //address subastaFactoryAddress;
+    ISubastaFactory subastaFactory;
 
     uint costoCarta = 5;
     uint costoTransferencia = 3;
@@ -38,8 +38,9 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
 
     mapping (uint => address) cartaApprovals;
 
-    constructor(address _ozAddress) public ERC721Metadata("CartaItem", "CITM") {
+    constructor(address _ozAddress, address _subastaFactoryAddress) public ERC721Metadata("CartaItem", "CITM") {
         ozContract = OzInterface(_ozAddress);
+        subastaFactory = ISubastaFactory(_subastaFactoryAddress);
     }
 
     /**
@@ -157,8 +158,7 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
      * @dev Para cambiar la direccion del contrato de subasta factory
      */
     function setSubastaFactoryAddress(address _subastaFactoryAddress) public onlyOwner {
-        subastaFactoryAddress = _subastaFactoryAddress;
-        subastaFactory = ISubastaFactory(subastaFactoryAddress);
+        subastaFactory = ISubastaFactory(_subastaFactoryAddress);
     }
 
     // Cuenta de destino de fondos

@@ -15,6 +15,6 @@ var SubastaFactory = artifacts.require("SubastaFactory");
 module.exports = function(deployer) {
     deployer.deploy(OzToken)
         .then(() => OzToken.deployed())
-        .then(() => deployer.deploy(CartaItem, OzToken.address))
-        .then(() => deployer.deploy(SubastaFactory, OzToken.address));
+        .then(() => deployer.deploy(SubastaFactory, OzToken.address))
+        .then(() => deployer.deploy(CartaItem, OzToken.address, SubastaFactory.address));
 }

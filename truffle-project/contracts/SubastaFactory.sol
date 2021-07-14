@@ -14,7 +14,7 @@ contract SubastaFactory {
 
     uint public idSubasta;
     Subasta[] public subastas;
-    OzInterface public ozContract;
+    OzInterface ozContract;
     address owner;
     
     constructor(address _ozAddress){
@@ -106,9 +106,14 @@ contract SubastaFactory {
         soloSiNoEsduenio(_idSubasta, _cuenta) returns (bool success){
 
         Subasta storage subasta = subastas[_idSubasta];
+        uint cantidadOferta = _amount;
+        address cuentaOferta = _cuenta;
         
-        uint totalNuevaOferta = subasta.ofertasLicitadores[_cuenta] + _amount;
 
+        require(ozContract.balanceOf(cuentaOferta) >= cantidadOferta, "No tiene saldo suficiente para realizar la oferta");
+
+        uint totalNuevaOferta = subasta.ofertasLicitadores[_cuenta] + _amount;
+        
         //Si la oferta entrante no supera la maxima oferta de otro licitador, rechazamos la oferta. 
         require (totalNuevaOferta <= subasta.maximaOfertaLicitador, "Su oferta debe superar la maxima actual");
 
@@ -126,9 +131,8 @@ contract SubastaFactory {
             }
             ofertaMaxima = totalNuevaOferta;
         }
-        uint cantidadOferta = _amount;
-        address cuentaOferta = _cuenta;
-        SubastaFactory.ozContract.transferFrom(cuentaOferta, address(this), cantidadOferta);
+
+        ozContract.transferFrom(cuentaOferta, address(this), cantidadOferta);
         emit RegistrarOferta(cuentaOferta,totalNuevaOferta, subasta.mejorLicitador);
 
         return true;
@@ -161,7 +165,7 @@ contract SubastaFactory {
         subasta.ofertasLicitadores[cuentaQueRetira] -= cantidadARetirar;
 
         //require (!payable(msg.sender).send(cantidadARetirar), "Hubo un error al retirar la oferta.");
-        SubastaFactory.ozContract.transferFrom(address(this), _cuenta, cantidadARetirar);
+        ozContract.transferFrom(address(this), _cuenta, cantidadARetirar);
         emit RegistrarRetiro(_cuenta, cuentaQueRetira, cantidadARetirar);
         return cantidadARetirar;
     }

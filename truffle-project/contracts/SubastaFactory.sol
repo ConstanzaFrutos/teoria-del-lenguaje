@@ -1,25 +1,17 @@
 pragma solidity ^0.8.0;
 
 import "./ozToken.sol";
-
-interface OzInterface {
-    function balanceOf(address account) external view returns (uint);
-    function transfer(address recipient, uint amount) external returns (bool);
-    function approve(address spender, uint amount) external returns (bool);
-    function transferFrom(address sender, address recipient, uint amount) external returns (bool);
-}
+import "./IOzToken.sol";
 
 contract SubastaFactory {
-
-
     uint public idSubasta;
     Subasta[] public subastas;
-    OzInterface ozContract;
+    IOzToken ozContract;
     address owner;
     
     constructor(address _ozAddress){
         idSubasta = 0;
-        ozContract = OzInterface(_ozAddress);
+        ozContract = IOzToken(_ozAddress);
         owner = msg.sender;
     }
 
@@ -78,7 +70,7 @@ contract SubastaFactory {
 
     function setTokenAdress(address _ozAddress) public payable returns(bool){
         require(msg.sender == owner, "Solo el OWNER puede cambiar el Token.");
-        ozContract = OzInterface(_ozAddress);
+        ozContract = IOzToken(_ozAddress);
         return true;
     }
 
@@ -109,16 +101,15 @@ contract SubastaFactory {
         uint cantidadOferta = _amount;
         address cuentaOferta = _cuenta;
         
-
         require(ozContract.balanceOf(cuentaOferta) >= cantidadOferta, "No tiene saldo suficiente para realizar la oferta");
 
-        uint totalNuevaOferta = subasta.ofertasLicitadores[_cuenta] + _amount;
+        uint totalNuevaOferta = subasta.ofertasLicitadores[cuentaOferta] + _amount;
         
         //Si la oferta entrante no supera la maxima oferta de otro licitador, rechazamos la oferta. 
         require (totalNuevaOferta <= subasta.maximaOfertaLicitador, "Su oferta debe superar la maxima actual");
 
         //Le asigno al licitador su nueva oferta
-        subasta.ofertasLicitadores[_cuenta] = totalNuevaOferta;
+        subasta.ofertasLicitadores[cuentaOferta] = totalNuevaOferta;
 
         uint ofertaMaxima = subasta.ofertasLicitadores[subasta.mejorLicitador];
 
@@ -138,7 +129,7 @@ contract SubastaFactory {
         return true;
     }
 
-    function retirarFondos(uint _idSubasta , address _cuenta ) public payable soloSiTerminoOCancelada(_idSubasta) returns (uint cantidadARetirar){
+    function retirarFondos(uint _idSubasta , address _cuenta ) public payable soloSiTerminoOCancelada(_idSubasta) returns (uint){
 
         address cuentaQueRetira;
         uint cantidadARetirar;

@@ -1,14 +1,9 @@
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.0;
 
 import "./CartaHelper.sol";
 import "./erc721.sol";
-
-interface OzInterface {
-    function balanceOf(address account) external view returns (uint);
-    function transfer(address recipient, uint amount) external returns (bool);
-    function approve(address spender, uint amount) external returns (bool);
-    function transferFrom(address sender, address recipient, uint amount) external returns (bool);
-}
+import "./IOzToken.sol";
 
 interface ISubastaFactory {
     function crearSubasta(address _duenio, uint _idCarta, uint _incrementoOferta, uint _tiempoInicial, uint _tiempoFinal) external returns(uint);
@@ -24,10 +19,9 @@ interface ISubastaFactory {
  * compra de las mismas o transferencia de ownership
  */
 contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
-    /*address ozAddress = 0xC3D1131420135b246B155BA17e32ba9f48c4D6A2;
-    OzInterface ozContract = OzInterface(ozAddress);*/
-    OzInterface ozContract;
-    //address subastaFactoryAddress;
+
+    IOzToken ozContract;
+    
     ISubastaFactory subastaFactory;
 
     uint costoCarta = 5;
@@ -39,7 +33,7 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
     mapping (uint => address) cartaApprovals;
 
     constructor(address _ozAddress, address _subastaFactoryAddress) public ERC721Metadata("CartaItem", "CITM") {
-        ozContract = OzInterface(_ozAddress);
+        ozContract = IOzToken(_ozAddress);
         subastaFactory = ISubastaFactory(_subastaFactoryAddress);
     }
 
@@ -76,9 +70,9 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
     }
 
     function ofertarCarta(uint _idSubasta, uint _amount) public returns(bool) {
-        require(_amount == 0, "Se debe ofertar una cantidad positiva");
+        require(_amount > 0, "Se debe ofertar una cantidad positiva");
         require(ozContract.balanceOf(msg.sender) >= _amount, "No tiene saldo suficiente para ofertar");
-        require( subastaFactory.ofertar(_idSubasta, _amount, msg.sender), "No se pudo ofertar en esta subasta");
+        require(subastaFactory.ofertar(_idSubasta, _amount, msg.sender), "No se pudo ofertar en esta subasta");
         ozContract.transferFrom(msg.sender, ozAccount, _amount);
         return true;
     }
@@ -90,11 +84,11 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
     }
 
     function cancelarSubasta(uint _idSubasta) public returns(bool) {
-        bool cancelarSubasta = subastaFactory.cancelarSubasta(_idSubasta, msg.sender );
+        bool _cancelarSubasta = subastaFactory.cancelarSubasta(_idSubasta, msg.sender);
         uint _idCarta = subastaFactory.getIdCartaEnSubasta(_idSubasta);
         Carta storage carta = cartas[_idCarta];
-        carta.enSubasta = cancelarSubasta;
-        return cancelarSubasta;
+        carta.enSubasta = _cancelarSubasta;
+        return _cancelarSubasta;
     }
 
     // Implementacion ERC721
@@ -151,7 +145,7 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
      * @dev Para cambiar la direccion del contrato OzToken
      */
     function setOzTokenAddress(address _ozTokenAddress) public onlyOwner {
-        ozContract = OzInterface(_ozTokenAddress);
+        ozContract = IOzToken(_ozTokenAddress);
     }
 
     /**

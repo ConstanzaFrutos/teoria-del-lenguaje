@@ -403,9 +403,9 @@ App = {
 
       App.contracts.CartaItem.deployed().then(function(instance) {
         cartaItemInstance = instance;
+        console.log(montoAOfertar);
 
-
-        return cartaItemInstance.ofertarCarta(idSubasta , montoAOfertar ,{from: account});
+        return cartaItemInstance.ofertarCarta(idSubasta, montoAOfertar ,{from: account});
       }).then(function(result) {
         alert(`usted oferto  ${montoAOfertar} para la subasta ${idSubasta}`);
         return;

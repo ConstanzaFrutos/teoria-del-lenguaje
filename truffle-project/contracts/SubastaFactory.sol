@@ -75,7 +75,6 @@ contract SubastaFactory {
     }
 
     function getIdCartaEnSubasta(uint _idSubasta) view public returns(uint){
-
         return subastas[_idSubasta].idCarta;
     }
 
@@ -106,7 +105,7 @@ contract SubastaFactory {
         uint totalNuevaOferta = subasta.ofertasLicitadores[cuentaOferta] + _amount;
         
         //Si la oferta entrante no supera la maxima oferta de otro licitador, rechazamos la oferta. 
-        require (totalNuevaOferta <= subasta.maximaOfertaLicitador, "Su oferta debe superar la maxima actual");
+        require (totalNuevaOferta >= subasta.maximaOfertaLicitador, "Su oferta debe superar la maxima actual");
 
         //Le asigno al licitador su nueva oferta
         subasta.ofertasLicitadores[cuentaOferta] = totalNuevaOferta;

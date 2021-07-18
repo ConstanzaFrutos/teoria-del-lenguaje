@@ -356,7 +356,6 @@ App = {
   },
 
   handleCancelarSubasta: function(event) {
-
     event.preventDefault();
 
     var cartaItemInstance;
@@ -417,22 +416,22 @@ App = {
   },
 
   handleRetirarFondosEnSubasta: function(event) {
-
     event.preventDefault();
 
     var cartaItemInstance;
+    let idSubasta = $(this).attr("data-id");
+    alert(`Retirando fondos de la subasta ${idSubasta}`);
 
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
       }
       var account = accounts[0];
-      let idSubasta = document.getElementById("data-id").value;
 
-      App.contracts.cartaItem.deployed().then(function(instance) {
+      App.contracts.CartaItem.deployed().then(function(instance) {
         cartaItemInstance = instance;
 
-        return cartaItemInstance.retirarFondos( idSubasta, {from: account, payable});
+        return cartaItemInstance.retirarFondos(idSubasta, {from: account});
       }).then(function(result) {
         alert(`usted retiro su oferta de la subasta ${idSubasta}`);
       }).catch(function(err) {

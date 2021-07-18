@@ -48,6 +48,13 @@
 
 <div id="inicio-view" class="container view-container">
   <h1 class="text-center">¡Bienvenido/a!</h1>
+  <h3 class="text-center">Estas listo/a para entrar en el mundo de Oz?</h3>
+  <p>
+    Podrás coleccionar las cartas del universo mas mágico utilizado la pesataña de "Cartas".<br>
+Ver tus súper valiosos OZTokens en la pesataña de "Tokens".<br>
+Intercambiar tus cartas por OZT y poder seguir tu aventura en la pesataña de "Subastar Carta".<br>
+Si estas bien mágico podes usar tus poderes, subastando OZT, para conseguir esa carta que Épica en la pesataña de "Subastas".
+  </p>
 </div>
 
 <div id="carta-view" class="container view-container">
@@ -79,10 +86,13 @@
           </p>
           <p class="descripcion-carta">
             Decripcion: <b></b>
-          </p>
+          </p>          
           <label for="direccion-destino">Dirección a la cual transferir: </label>
           <input type="text" class="direccion-destino" id="direccion-destino" name="direccion-destino">
           <input type="text" class="id-carta" name="id-carta">
+          <div class="img-carta">
+            <img src=""/>
+          </div>
           <button class="btn btn-default btn-transferir" type="submit">Transferir carta</button>
         </div>
       </form>
@@ -138,7 +148,8 @@
 <div id="subasta-view" class="container view-container">
   <h1 class="text-center">Subastas</h1>
 
-  <button class="btn btn-default btn-obtener-subastas-en-curso" type="button">Ver subastas</button>
+  <button class="btn btn-default btn-obtener-subastas-en-curso" type="button">Ver todas las subastas</button>
+  <button class="btn btn-default btn-obtener-subastas-en-curso-ac-ca" type="button">Ver subastas activas/canceladas</button>
 
   <div class="lista-subastas-en-curso">
   </div>
@@ -149,6 +160,8 @@
       
       <p class="subasta-en-curso-id-subasta"></p>
       <p class="subasta-en-curso-duenio"></p>
+      <p class="subasta-en-curso-mejor-oferta"></p>
+      <p class="subasta-en-curso-mejor-oferta-address"></p>
       <p class="subasta-en-curso-id-carta"></p>
       <p class="subasta-en-curso-tiempo-inicial"></p>
       <p class="subasta-en-curso-tiempo-final"></p>

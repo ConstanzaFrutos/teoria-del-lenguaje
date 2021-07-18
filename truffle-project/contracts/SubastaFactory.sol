@@ -120,8 +120,8 @@ contract SubastaFactory {
             ofertaMaxima = totalNuevaOferta;
         }
 
-        ozContract.transferFrom(cuentaOferta, address(this), cantidadOferta);
-        emit RegistrarOferta(cuentaOferta,totalNuevaOferta, subasta.mejorLicitador);
+        //ozContract.transferFrom(cuentaOferta, address(this), cantidadOferta);
+        //emit RegistrarOferta(cuentaOferta,totalNuevaOferta, subasta.mejorLicitador);
 
         return true;
     }
@@ -153,8 +153,8 @@ contract SubastaFactory {
         subasta.ofertasLicitadores[cuentaQueRetira] -= cantidadARetirar;
 
         //require (!payable(msg.sender).send(cantidadARetirar), "Hubo un error al retirar la oferta.");
-        ozContract.transferFrom(address(this), _cuenta, cantidadARetirar);
-        emit RegistrarRetiro(_cuenta, cuentaQueRetira, cantidadARetirar);
+        //ozContract.transferFrom(address(this), _cuenta, cantidadARetirar);
+        //emit RegistrarRetiro(_cuenta, cuentaQueRetira, cantidadARetirar);
         return cantidadARetirar;
     }
 

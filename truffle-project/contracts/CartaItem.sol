@@ -32,9 +32,10 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
 
     mapping (uint => address) cartaApprovals;
 
-    constructor(address _ozAddress, address _subastaFactoryAddress) public ERC721Metadata("CartaItem", "CITM") {
+    constructor(address _ozAddress, address _subastaFactoryAddress , address _ozAccount) public ERC721Metadata("CartaItem", "CITM") {
         ozContract = IOzToken(_ozAddress);
         subastaFactory = ISubastaFactory(_subastaFactoryAddress);
+        ozAccount = _ozAccount;
     }
 
     /**
@@ -115,7 +116,7 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
         personaCantidadCartas[_to]++;
         personaCantidadCartas[_from]--;
         cartaAPersona[_tokenId] = _to;
-        Transfer(_from, _to, _tokenId);
+        emit Transfer(_from, _to, _tokenId);
     }
 
     function transfer(address _to, uint256 _tokenId) public override soloDuenioDe(_tokenId) {
@@ -124,7 +125,7 @@ contract CartaItem is CartaHelper, ERC721, ERC721Metadata {
 
     function approve(address _to, uint256 _tokenId) public override soloDuenioDe(_tokenId) {
         cartaApprovals[_tokenId] = _to;
-        Approval(msg.sender, _to, _tokenId);
+        emit Approval(msg.sender, _to, _tokenId);
     }
 
     function takeOwnership(uint256 _tokenId) public override {

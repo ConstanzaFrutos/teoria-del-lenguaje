@@ -31344,12 +31344,12 @@
         }
       },
       "links": {},
-      "address": "0x7172Ff1b3249f4353FF66e8F5f6E30086F0f4bE4",
-      "transactionHash": "0x62c9cac0832a310ed50b714deb3b7c0fcf2f7066ae3ae86ec2d8970fbc5141e1"
+      "address": "0x396E3A68b1f2e9eDAC5C2c93fbd9F902933dCb2C",
+      "transactionHash": "0xdd84297c0fe561ca32ca85b6f70245f827f755641eb8816f72de844c11e4ae32"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-07-18T00:04:07.370Z",
+  "updatedAt": "2021-07-18T00:33:10.381Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Funciones de administracion de cartas como  compra de las mismas o transferencia de ownership",

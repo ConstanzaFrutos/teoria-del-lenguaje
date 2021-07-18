@@ -61,9 +61,7 @@ contract SubastaFactory {
     function getIdSubastasDisponibles() view public returns(uint[] memory){
         uint[] memory subastasDisponibles = new uint[](idSubasta);
         for(uint i = 0; i < idSubasta; i++){
-            if(!estaCancelada(i)){
-                subastasDisponibles[i] = i;
-            }
+            subastasDisponibles[i] = i;            
         }
         return subastasDisponibles;
     }
@@ -205,7 +203,7 @@ contract SubastaFactory {
 
     modifier soloSiTerminoOCancelada(uint _idSubasta){
         Subasta storage subasta = subastas[_idSubasta];
-        require (block.number < subasta.tiempoFinal && !subasta.cancelada, "Esta accion no puede realizarse si la subasta esta en curso");
+        require (block.number < subasta.tiempoFinal || !subasta.cancelada, "Esta accion no puede realizarse si la subasta esta en curso");
         _;
     }
 

@@ -135,10 +135,13 @@ App = {
       tipoCarta = 'Epica';
       
       for (i = 0; i < descripciones.length; i++) {
-        if (tipos[i] == 1) {
-          tipoCarta == 'Normal';
-        } else if (tipos[i] == 2) {
-          tipoCarta == 'Rara';
+        console.log(tipos[i] * 1)
+        if (tipos[i]*1 === 0) {
+          tipoCarta = 'Normal';
+        } else if (tipos[i]*1 === 1) {
+          tipoCarta = 'Rara';
+        } else if (tipos[i]*1 === 2) {
+          tipoCarta = 'Epica';
         }
         const node = App.copyTemplate(tipoCarta, descripciones[i], i);
         listaCartas.appendChild(node);
@@ -167,14 +170,15 @@ App = {
       }).then(function(cartas) {
         const [ids, descripciones, tipos] = cartas;
         tipoCarta = 'Epica';
-        console.log(ids);
-        console.log(tipos);
         
         for (i = 0; i < descripciones.length; i++) {
-          if (tipos[i] == 1) {
-            tipoCarta == 'Normal';
-          } else if (tipos[i] === 2) {
-            tipoCarta == 'Rara';
+          console.log(tipos[i] * 1)
+          if (tipos[i]*1 === 0) {
+            tipoCarta = 'Normal';
+          } else if (tipos[i]*1 === 1) {
+            tipoCarta = 'Rara';
+          } else if (tipos[i]*1 === 2) {
+            tipoCarta = 'Epica';
           }
           const node = App.copyTemplate(tipoCarta, descripciones[i], ids[i]);
           listaCartas.appendChild(node);
@@ -247,9 +251,11 @@ App = {
       }
 
       var account = accounts[0];
+      console.log(account);
 
       var direccionDestino = data[0].value;  
       var cartaId = data[1].value;  
+      console.log(data);
 
       App.contracts.CartaItem.deployed().then(function(instance) {
         cartaInstance = instance;

@@ -2,7 +2,9 @@ App = {
   web3Provider: null,
   contracts: {},
   listaCartas: null,
+  subastaActual : null,
   template: null,
+  filterCanceladas: true,
 
 
   init: async function() {
@@ -36,7 +38,7 @@ App = {
 
     listaCartas = document.querySelector(".cartas-list");
     template = document.querySelector("template");
-
+    subasta = document.querySelector(".cartas-list");
     return App.initContract();
   },
 
@@ -51,6 +53,15 @@ App = {
 
       // Use our contract to retrieve cartas
       return App.handleInitPage();
+    });
+
+    $.getJSON('SubastaFactory.json', function(data) {
+      // Get the necessary contract artifact file and instantiate it with @truffle/contract
+      var SubastaFactoryArtifact = data;
+      App.contracts.SubastaFactory = TruffleContract(SubastaFactoryArtifact);
+
+      // Set the provider for our contract
+      App.contracts.SubastaFactory.setProvider(App.web3Provider);
     });
 
     $.getJSON('CartaHelper.json', function(data) {
@@ -71,8 +82,14 @@ App = {
     $(document).on('click', '.btn-ver-todas-las-cartas', App.handleGetCartas);
     $(document).on('click', '.btn-ver-mis-cartas', App.handleGetMisCartas);
     $(document).on('click', '.btn-ver-mis-tokens', App.handleVerCantidadTokens);
-
     $(document).on('submit', '.form-transferencia', App.handleTransferirCarta);
+    
+    $(document).on('click', '.btn-obtener-subastas-en-curso', App.handleObtenerSubastasEnCurso);
+    $(document).on('click', '.btn-obtener-subastas-en-curso-ac-ca', App.handleFiltrarSubastas);
+    $(document).on('click', '.btn-comenzar-subasta', App.handleComenzarSubasta);
+    $(document).on('click', '.btn-cancelar-subasta', App.handleCancelarSubasta);
+    $(document).on('click', '.btn-ofertar-subasta', App.handleOfertarSubasta);
+    $(document).on('click', '.btn-retirar-subasta', App.handleRetirarFondosEnSubasta);
   },
 
   handleInitPage() {
@@ -82,7 +99,6 @@ App = {
       if (error) {
         console.log(error);
       }
-
       var account = accounts[0];
       console.log(`Obteniendo balance de ${account}`);
 
@@ -107,6 +123,7 @@ App = {
 
   handleGetCartas() {
     //TODO mostrar duenio
+    $(".cartas-list").empty();
     var cartaInstance;
 
     App.contracts.CartaItem.deployed().then(function(instance) {
@@ -118,10 +135,13 @@ App = {
       tipoCarta = 'Epica';
       
       for (i = 0; i < descripciones.length; i++) {
-        if (tipos[i] == 1) {
-          tipoCarta == 'Normal';
-        } else if (tipos[i] == 2) {
-          tipoCarta == 'Rara';
+        console.log(tipos[i] * 1)
+        if (tipos[i]*1 === 0) {
+          tipoCarta = 'Normal';
+        } else if (tipos[i]*1 === 1) {
+          tipoCarta = 'Rara';
+        } else if (tipos[i]*1 === 2) {
+          tipoCarta = 'Epica';
         }
         const node = App.copyTemplate(tipoCarta, descripciones[i], i);
         listaCartas.appendChild(node);
@@ -132,6 +152,7 @@ App = {
   },
 
   handleGetMisCartas() {
+    $(".cartas-list").empty();
     var cartaInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
@@ -149,13 +170,15 @@ App = {
       }).then(function(cartas) {
         const [ids, descripciones, tipos] = cartas;
         tipoCarta = 'Epica';
-        console.log(ids);
         
         for (i = 0; i < descripciones.length; i++) {
-          if (tipos[i] == 1) {
-            tipoCarta == 'Normal';
-          } else if (tipos[i] == 2) {
-            tipoCarta == 'Rara';
+          console.log(tipos[i] * 1)
+          if (tipos[i]*1 === 0) {
+            tipoCarta = 'Normal';
+          } else if (tipos[i]*1 === 1) {
+            tipoCarta = 'Rara';
+          } else if (tipos[i]*1 === 2) {
+            tipoCarta = 'Epica';
           }
           const node = App.copyTemplate(tipoCarta, descripciones[i], ids[i]);
           listaCartas.appendChild(node);
@@ -177,10 +200,15 @@ App = {
 
     const nameElement = element.querySelector(".tipo-carta b");
     nameElement.innerText = tipo;
+    nameElement.classList.add(tipo);
   
     const addressElement = element.querySelector(".descripcion-carta b");
     addressElement.innerText = descripcion;
   
+    const imgElement = element.querySelector(".img-carta img");
+    imgElement.src = 'https://gravatar.com/avatar/'+descripcion+'?s=150&d=robohash&r=x';
+    imgElement.classList.add(tipo);
+
     return element;
   },
 
@@ -223,9 +251,11 @@ App = {
       }
 
       var account = accounts[0];
+      console.log(account);
 
       var direccionDestino = data[0].value;  
       var cartaId = data[1].value;  
+      console.log(data);
 
       App.contracts.CartaItem.deployed().then(function(instance) {
         cartaInstance = instance;
@@ -239,6 +269,211 @@ App = {
         console.log(err.message);
       });
     });
+  },
+
+  // Subasta
+
+  loadSubastaEnCurso: function (subastaId, duenio, cartaId, tiempoInicial, tiempoFinal, incrementoMinimo, cancelada, mejorLicitador, maximaOfertaLicitador) {
+    let template = $(".subasta-en-curso").clone();
+    template.removeClass('subasta-en-curso');
+    template.removeAttr('hidden');
+    template.addClass('subasta-en-curso-clone');
+
+    template.find("p.subasta-en-curso-id-subasta").html("Id de la subasta : " + subastaId);
+    template.find("p.subasta-en-curso-duenio").html("Dueño de la subasta: " + duenio);
+    template.find("p.subasta-en-curso-mejor-oferta").html("Mejor oferta de la subasta: " + maximaOfertaLicitador);
+    template.find("p.subasta-en-curso-mejor-oferta-address").html("Dueño de la mejor oferta: " + mejorLicitador);
+    template.find("p.subasta-en-curso-id-carta").html("Id de la carta: " + cartaId);
+    template.find("p.subasta-en-curso-tiempo-inicial").html("Tiempo inicial: " + tiempoInicial);
+    template.find("p.subasta-en-curso-tiempo-final").html("Tiempo final: " + tiempoFinal);
+    template.find("p.subasta-en-curso-incremento-minimo").html("Incremento mínimo: " + incrementoMinimo);
+    
+    if (!cancelada){
+      template.find("p.button-cancelar").html('<button class="btn btn-default btn-cancelar-subasta" type="button" data-id="' + subastaId + '">Cancelar Subasta</button>');
+      template.addClass('subasta-activa');
+    }else{
+      template.find("p.subasta-estado-cancelado").html('<p class="texto-rojo" > Esta subasta esta cancelada </p>');
+      template.addClass('subasta-cancelada');
+    }
+    template.find("p.button-retirar-fondos").html('<button class="btn btn-default btn-retirar-subasta" type="button" data-id="' + subastaId + '">Retirar Fondos</button>');
+    template.appendTo(".lista-subastas-en-curso");
+  },
+
+  
+  handleFiltrarSubastas: function(event) {
+    if(App.filterCanceladas){
+      $(".subasta-cancelada").hide();
+      $(".subasta-activa").show();
+      App.filterCanceladas = false;
+    } else {
+      $(".subasta-cancelada").show();
+      $(".subasta-activa").hide();
+      App.filterCanceladas = true;
+    }
+  },
+
+  handleObtenerSubastasEnCurso: function(event) {
+
+    var subastaFactoryInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      alert(`Obteniendo subastas en curso`);
+
+      App.contracts.SubastaFactory.deployed().then(function(instance) {
+        subastaFactoryInstance = instance;
+  
+        return subastaFactoryInstance.getIdSubastasDisponibles();
+      }).then(function(subastas) {
+        console.log(subastas);
+        $(".lista-subastas-en-curso").empty();
+
+        let subastasPromise = [];
+        for (i = 0; i < subastas.length; i++) {
+          console.log(subastas[i]*1);
+          subastasPromise.push(subastaFactoryInstance.subastas(subastas[i]*1));
+        }
+      
+        Promise.all(subastasPromise).then(subastas => {
+          subastas.forEach(subasta => {
+            let subastaId = subasta[0] * 1;
+            let duenio = subasta[1];
+            let cartaId = subasta[2] * 1;
+            let tiempoInicial = subasta[3] * 1;
+            let tiempoFinal = subasta[4] * 1;
+            let incrementoMinimo = subasta[5] * 1;
+            let cancelada = subasta[6];
+            let mejorLicitador = subasta[7];
+            let maximaOfertaLicitador = subasta[8];
+
+            App.loadSubastaEnCurso(subastaId, duenio, cartaId, tiempoInicial, tiempoFinal, incrementoMinimo, cancelada, mejorLicitador, maximaOfertaLicitador);
+          });
+        }).catch(function(err) {
+          console.log(err.message);
+        });
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  handleComenzarSubasta: function(event) {
+    event.preventDefault();
+
+    var data = $("#form-subasta :input").serializeArray();
+    var cartaItemInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      var cartaId = data[0].value;
+      var incrementoMinimo = data[1].value;
+      var tiempoInicial = data[2].value;
+      var tiempoFinal = data[3].value;
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaItemInstance = instance;
+
+        return cartaItemInstance.subastarCarta(account, cartaId, incrementoMinimo, tiempoInicial, tiempoFinal, {from:account});
+      }).then(function(result) {
+        event.preventDefault();
+        alert(`La subasta ${result} fue creada`);
+      }).catch(function(err) {
+        alert(err.message);
+      });
+    });
+  },
+
+  handleCancelarSubasta: function(event) {
+    event.preventDefault();
+
+    var cartaItemInstance;
+    let idSubasta = $(this).attr("data-id");
+    alert(`Cancelando la subasta ${idSubasta}`);
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      
+      var account = accounts[0];
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaItemInstance = instance;
+
+        return cartaItemInstance.cancelarSubasta(idSubasta, {from: account});
+      }).then(function(result) {
+        alert(`Subasta cancelada`);
+        location.reload();
+        return;
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+
+  },
+
+  handleOfertarSubasta: function(event) {
+
+    event.preventDefault();
+
+    var cartaItemInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+      let idSubasta = document.getElementById("id-subasta-oferta").value;
+      let montoAOfertar = document.getElementById("cantidad-a-ofertar").value;
+      console.log(montoAOfertar);
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaItemInstance = instance;
+        console.log(montoAOfertar);
+
+        return cartaItemInstance.ofertarCarta(idSubasta, montoAOfertar ,{from: account});
+      }).then(function(result) {
+        alert(`usted oferto  ${montoAOfertar} para la subasta ${idSubasta}`);
+        return;
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+
+  },
+
+  handleRetirarFondosEnSubasta: function(event) {
+    event.preventDefault();
+
+    var cartaItemInstance;
+    let idSubasta = $(this).attr("data-id");
+    alert(`Retirando fondos de la subasta ${idSubasta}`);
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+      App.contracts.CartaItem.deployed().then(function(instance) {
+        cartaItemInstance = instance;
+
+        return cartaItemInstance.retirarFondos(idSubasta, {from: account});
+      }).then(function(result) {
+        alert(`usted retiro su oferta de la subasta ${idSubasta}`);
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+
   },
 
   handleVerCantidadTokens: function() {

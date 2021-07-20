@@ -1,92 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Magos de Oz</title>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>Magos de Oz</title>
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="container">
+  <link href="css/styles.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-8 col-sm-push-2">
+      <h1 class="text-center">Magos de Oz</h1>
+      <br>
+      <h4 class="cuenta-actual-direccion"></h4>
+      <hr/>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-sm-push-2 text-center">
+        <select id="view-select">
+          <option value="inicio-view" selected>Seleccione su vista</option>
+          <option value="carta-view">Cartas</option>
+          <option value="token-view">Tokens</option>
+          <option value="subasta-admin-view">Subastar carta</option>
+          <option value="subasta-view">Subastas</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="inicio-view" class="container view-container">
+  <h1 class="text-center">¡Bienvenido/a!</h1>
+  <h3 class="text-center">Estas listo/a para entrar en el mundo de Oz?</h3>
+  <p>
+    Podrás coleccionar las cartas del universo mas mágico utilizado la pestaña de "Cartas".<br>
+Ver tus súper valiosos OZTokens en la pestaña de "Tokens".<br>
+Intercambiar tus cartas por OZT y poder seguir tu aventura en la pestaña de "Subastar Carta".<br>
+Si estas bien mágico podes usar tus poderes, subastando OZT, para conseguir esa carta que Épica en la pesataña de "Subastas".
+  </p>
+</div>
+
+<div id="carta-view" class="container view-container">
+  <h1 class="text-center">Cartas</h1>
+  <div class="row">
+    <span class="col-xs-8 col-xs-push-2 balance-oz" style="border-color: black; border: solid"></span>
+  </div>
+  <div class="row">
+    <div class="col-xs-4"><button class="btn btn-default btn-clean" type="button">Limpiar</button></div>
+    <div class="col-xs-4"><button class="btn btn-default btn-ver-todas-las-cartas" type="button">Ver todas las cartas</button></div>
+    <div class="col-xs-4"><button class="btn btn-default btn-ver-mis-cartas" type="button">Ver mis cartas</button></div>
+    <div class="col-xs-4"><button class="btn btn-default btn-crear-carta" type="button">Crear carta</button></div>
+  </div>
+
+  <div>
+    <ul class="cartas-list">
+    </ul>
+  </div>
+
+  <template>
+    <li class="carta">
+      <form class="form-transferencia" id="form-transferencia">
+        <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
+          <p class="id-carta">
+            Id: <span></span>
+          </p>
+          <p class="tipo-carta">
+            Tipo: <b></b>
+          </p>
+          <p class="descripcion-carta">
+            Decripcion: <b></b>
+          </p>          
+          <label for="direccion-destino">Dirección a la cual transferir: </label>
+          <input type="text" class="direccion-destino" id="direccion-destino" name="direccion-destino">
+          <input type="text" class="id-carta-a-transferir" name="id-carta-a-transferir">
+          <div class="img-carta">
+            <img src=""/>
+          </div>
+          <button class="btn btn-default btn-transferir" type="submit">Transferir carta</button>
+        </div>
+      </form>
+    </li>
+  </template>
+
+
+
+  <div id="cartaTemplate" style="display: none;">
+    <div class="col-sm-6 col-md-4 col-lg-3">
+      <div class="panel panel-default panel-carta">
+        <div class="panel-heading">
+          <h3 class="panel-title">Carta</h3>
+        </div>
+        <div class="panel-body">
+          <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://http2.mlstatic.com/D_NQ_NP_719937-MLA28791890860_112018-O.webp" data-holder-rendered="true">
+          <br/><br/>
+          <strong>Tipo</strong>: <span class="tipo-carta" type="tipo-carta">tipo</span><br/>
+          <strong>Descripcion</strong>: <span class="descripcion-carta" type="descripcion-carta">descripcion</span><br/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="token-view" class="container view-container">
+  <h1 class="text-center">Token</h1>
+  <button class="btn btn-default btn-ver-mis-tokens" type="button">Ver mis Tokens</button>
+</div>
+
+<div id="subasta-admin-view" class="container view-container">
+  <h1 class="text-center">Subastar Cartas</h1>
+  <form class="form-subasta" id="form-subasta">
+    <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
+      <label for="id-carta">ID de la carta a Subastar</label>
+      <input type="text" class="id-carta" id ="id-carta" name="id-carta">
+      <br>
+      <label for="incremento-minimo">Incremento minimo de la subasta</label>
+      <input type="text" class="incremento-minimo" id ="incremento-minimo" name="incremento-minimo">
+      <br>
+      <label for="tiempo-inicial">Tiempo inicial de la subasta</label>
+      <input type="text" class="tiempo-inicial" id ="tiempo-inicial" name="tiempo-inicial">
+      <br>
+      <label for="tiempo-final">Tiempo final de la subasta</label>
+      <input type="text" class="tiempo-final" id ="tiempo-final" name="tiempo-final">
+      <button class="btn btn-default btn-comenzar-subasta" type="submit"> Subastar Carta</button>
+    </div>
+  </form>
+
+
+</div>
+
+<div id="subasta-view" class="container view-container">
+  <h1 class="text-center">Subastas</h1>
+
+  <button class="btn btn-default btn-obtener-subastas-en-curso" type="button">Ver todas las subastas</button>
+  <button class="btn btn-default btn-obtener-subastas-en-curso-ac-ca" type="button">Ver subastas activas/canceladas</button>
+
+  <div class="lista-subastas-en-curso">
+  </div>
+
+  <div class="subasta-en-curso" hidden>
+    <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
+      <p class="subasta-estado-cancelado"></p>
+      
+      <p class="subasta-en-curso-id-subasta"></p>
+      <p class="subasta-en-curso-duenio"></p>
+      <p class="subasta-en-curso-mejor-oferta"></p>
+      <p class="subasta-en-curso-mejor-oferta-address"></p>
+      <p class="subasta-en-curso-id-carta"></p>
+      <p class="subasta-en-curso-tiempo-inicial"></p>
+      <p class="subasta-en-curso-tiempo-final"></p>
+      <p class="subasta-en-curso-incremento-minimo"></p>
+
       <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-push-2">
-          <h1 class="text-center">Magos de Oz</h1>
-          <br>
-          <h4 class="cuenta-actual-direccion"></h4>
-          <hr/>
-        </div>
+        <div class="col-xs-4"><p class="button-cancelar"></p></div>
+        <div class="col-xs-4"><p class="button-retirar-fondos"></p></div>
       </div>
     </div>
+  </div>
 
-    <div>
-      <button class="btn btn-default btn-clean" type="button">Limpiar</button>
-      <button class="btn btn-default btn-ver-todas-las-cartas" type="button">Ver todas las cartas</button>
-      <button class="btn btn-default btn-ver-mis-cartas" type="button">Ver mis cartas</button>
-      <button class="btn btn-default btn-crear-carta" type="button">Crear carta</button>
-      <button class="btn btn-default btn-ver-mis-tokens" type="button">Ver mis Tokens</button>
-      <span class="balance-oz" style="border-color: black; border: solid"></span>
-    </div>
-
-    <div>
-      <ul class="cartas-list">
-      </ul>
-    </div>
-
-    <template>
-      <li class="carta">
-        <form class="form-transferencia" id="form-transferencia">
-          <div style="border: solid; border-radius: 0.5px; border-color: black; margin: 1px; padding-left: 5px;">
-            <p class="id-carta">
-              Id: <span></span>
-            </p>
-            <p class="tipo-carta">
-              Tipo: <b></b>
-            </p>
-            <p class="descripcion-carta">
-              Decripcion: <b></b>
-            </p>
-            <label for="direccion-destino">Dirección a la cual transferir: </label>
-            <input type="text" class="direccion-destino" id="direccion-destino" name="direccion-destino">
-            <input type="text" class="id-carta" name="id-carta">
-            <button class="btn btn-default btn-transferir" type="submit">Transferir carta</button>
-          </div>
-        </form>
-      </li>
-    </template>
-
-    <div id="cartaTemplate" style="display: none;">
-      <div class="col-sm-6 col-md-4 col-lg-3">
-        <div class="panel panel-default panel-carta">
-          <div class="panel-heading">
-            <h3 class="panel-title">Carta</h3>
-          </div>
-          <div class="panel-body">
-            <img alt="140x140" data-src="holder.js/140x140" class="img-rounded img-center" style="width: 100%;" src="https://http2.mlstatic.com/D_NQ_NP_719937-MLA28791890860_112018-O.webp" data-holder-rendered="true">
-            <br/><br/>
-            <strong>Tipo</strong>: <span class="tipo-carta" type="tipo-carta">tipo</span><br/>
-            <strong>Descripcion</strong>: <span class="descripcion-carta" type="descripcion-carta">descripcion</span><br/>
-          </div>
+  <div>
+    <form class="form-ofertar" id="form-ofertar">
+      <div class="row">
+        <div class="col-xs-4">
+          <label for="id-subasta-oferta">Id Subasta: </label><br>
+          <input type="text" class="id-subasta-oferta" id="id-subasta-oferta" name="id-subasta-oferta">
+        </div>
+        <div class="col-xs-4">
+          <label for="cantidad-a-ofertar">Cantidad a ofertar: </label><br>
+          <input type="text" class="ofertar" id="cantidad-a-ofertar" name="cantidad-a-ofertar">
+        </div>
+        <div class="col-xs-4">
+          <button class="btn btn-default btn-ofertar-subasta" type="submit">Ofertar</button>
         </div>
       </div>
-    </div>
+    </form>
+  </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/web3.min.js"></script>
-    <script src="js/truffle-contract.js"></script>
-    <script src="js/app.js"></script>
-  </body>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/web3.min.js"></script>
+<script src="js/truffle-contract.js"></script>
+<script src="js/app.js"></script>
+<script src="js/custom.js"></script>
+</body>
 </html>

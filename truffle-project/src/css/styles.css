@@ -1,0 +1,56 @@
+body{
+    font-family: 'Cinzel', serif;
+    padding: 35px;
+}
+.view-container{
+    margin-top: 50px;
+    padding: 0 50px;
+    display: none;
+    background-color: #f9f9f9;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+.btn-default {
+    width: 100%;
+    margin: 10px 0px;
+}    
+
+select {
+    width: 30%;
+}
+
+.texto-rojo{
+    color: red;
+}
+
+.img-carta{
+    text-align: center;
+}
+
+
+.img-carta img{
+    margin: 4%;
+    border-radius: 5px;
+}
+
+.img-carta img.Rara{
+    border: 2px solid red;
+}
+.img-carta img.Normal{
+    border: 2px solid blue;
+}
+.img-carta img.Epica{
+    border: 2px solid gold;
+}
+
+.Rara{
+    color: red;
+}
+
+.Normal{
+    color: blue;
+}
+.Epica{
+    color: gold;
+}
